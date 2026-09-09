@@ -1,13 +1,11 @@
-"use client";
+import type { Metadata } from "next";
+import { PrivacyView } from "@/components/privacy/privacy-view";
 
-import { useLanguage } from "@/i18n/language-provider";
+export const metadata: Metadata = {
+  title: "Politika privatnosti",
+  description: "How Bistro & Jars collects, uses and protects your data.",
+};
 
 export default function PrivacyPage() {
-  const { t } = useLanguage();
-
-  return (
-    <section className="mx-auto max-w-[110rem] px-6 pb-24 pt-32 md:px-10">
-      <h1 className="font-display text-headline font-normal">{t.nav.privacy}</h1>
-    </section>
-  );
+  return <PrivacyView />;
 }

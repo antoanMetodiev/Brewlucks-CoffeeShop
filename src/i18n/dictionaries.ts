@@ -43,6 +43,26 @@ const sr = {
     previous: "Prethodna",
     next: "Sledeća",
   },
+  contact: {
+    heroEyebrow: "Kontakt",
+    heroTitle: "Pišite nam.",
+    heroLead:
+      "Za rezervacije i upite, popunite formu ili nam pišite direktno na WhatsApp-u.",
+    formName: "Ime",
+    formNamePlaceholder: "Vaše ime",
+    formPhone: "Telefon / WhatsApp",
+    formPhonePlaceholder: "+381 6x xxx xxxx",
+    formMessage: "Poruka",
+    formMessagePlaceholder: "Datum, broj osoba, ili šta vas zanima...",
+    formSubmit: "Pošaljite upit",
+    comingSoonTitle: "Slanje uskoro stiže.",
+    comingSoonBody:
+      "Ova forma još nije povezana sa WhatsApp-om. Do tada nam pišite direktno — odgovaramo brzo.",
+  },
+  privacy: {
+    contactTitle: "Kontakt",
+    contactBody: "Za sva pitanja o vašim podacima, pišite nam:",
+  },
   menu: {
     intro: "Doručak, roštilj, burgeri i nešto slatko — od jutra do kasno.",
     categories: "Kategorije",
@@ -108,6 +128,25 @@ const en: Dictionary = {
     close: "Close",
     previous: "Previous",
     next: "Next",
+  },
+  contact: {
+    heroEyebrow: "Contact",
+    heroTitle: "Get in touch.",
+    heroLead: "For reservations and inquiries, fill out the form or message us directly on WhatsApp.",
+    formName: "Name",
+    formNamePlaceholder: "Your name",
+    formPhone: "Phone / WhatsApp",
+    formPhonePlaceholder: "+381 6x xxx xxxx",
+    formMessage: "Message",
+    formMessagePlaceholder: "Date, party size, or what you'd like to know...",
+    formSubmit: "Send inquiry",
+    comingSoonTitle: "Online submissions are coming soon.",
+    comingSoonBody:
+      "This form isn't connected to WhatsApp yet. Until then, message us directly — we reply quickly.",
+  },
+  privacy: {
+    contactTitle: "Contact",
+    contactBody: "For any questions about your data, write to us:",
   },
   menu: {
     intro: "Breakfast, the grill, burgers and something sweet — from morning until late.",

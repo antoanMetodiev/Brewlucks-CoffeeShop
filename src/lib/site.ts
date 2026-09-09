@@ -10,6 +10,10 @@ export const site = {
     mapsUrl: "https://www.google.com/maps/search/?api=1&query=44.8125,20.4612",
   },
   whatsappNumber: "381600000000",
+  // Placeholder — replace with the venue's real registered legal name and contact email
+  // once available; used on the privacy policy as the data controller's identity.
+  legalName: "Bistro & Jars d.o.o.",
+  privacyEmail: "privacy@bistroandjars.rs",
   instagram: {
     handle: "@bistroandjars",
     url: "https://instagram.com",

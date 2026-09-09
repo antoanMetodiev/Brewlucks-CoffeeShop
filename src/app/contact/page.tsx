@@ -1,13 +1,11 @@
-"use client";
+import type { Metadata } from "next";
+import { ContactView } from "@/components/contact/contact-view";
 
-import { useLanguage } from "@/i18n/language-provider";
+export const metadata: Metadata = {
+  title: "Kontakt",
+  description: "Reserve a table or send an inquiry to Bistro & Jars.",
+};
 
 export default function ContactPage() {
-  const { t } = useLanguage();
-
-  return (
-    <section className="mx-auto max-w-[110rem] px-6 pb-24 pt-32 md:px-10">
-      <h1 className="font-display text-headline font-normal">{t.nav.contact}</h1>
-    </section>
-  );
+  return <ContactView />;
 }
