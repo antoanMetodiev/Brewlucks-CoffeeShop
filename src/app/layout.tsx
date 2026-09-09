@@ -32,7 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${cormorant.variable} ${inter.variable} antialiased`}>
         <LanguageProvider>
           <Header />
-          <main className="min-h-dvh pt-24">{children}</main>
+          <main className="min-h-dvh">{children}</main>
           <Footer />
         </LanguageProvider>
       </body>

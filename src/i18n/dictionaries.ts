@@ -14,6 +14,38 @@ const sr = {
     openMenu: "Otvori meni",
     closeMenu: "Zatvori meni",
   },
+  home: {
+    heroEyebrow: "Beograd",
+    heroTitle: "Kafa koja se ne žuri.",
+    heroLead:
+      "Bistro i kafe bar u kojem se doručak servira do podneva, a razgovor traje duže.",
+    scroll: "Skrolujte",
+    statementTitle: "Sve počinje od zrna.",
+    statementBody:
+      "Biramo male pržionice, menjamo zrno svake nedelje i podešavamo mlin svakog jutra. Ono što stigne do šoljice je zbir tih sitnih odluka.",
+    signatureEyebrow: "Potpis kuće",
+    signatureTitle: "Kako nastaje Jar No. 1",
+    signatureSteps: [
+      {
+        title: "Dupli espresso",
+        body: "Sveže mleveno zrno i ekstrakcija od dvadeset sedam sekundi.",
+      },
+      {
+        title: "Krem od vanile",
+        body: "Mutimo ga ujutru, sa pravom vanilom i bez šećera u prahu.",
+      },
+      {
+        title: "Slani karamel",
+        body: "Kuvan do tamnog ćilibara, sa prstohvatom morske soli.",
+      },
+      {
+        title: "Slaganje u teglu",
+        body: "Sloj po sloj, da svaki gutljaj bude malo drugačiji.",
+      },
+    ],
+    ctaTitle: "Vidimo se ujutru.",
+    ctaBody: "Rezervišite sto ili nam pišite — javljamo se na WhatsApp-u.",
+  },
   menu: {
     intro:
       "Kafu pržimo u malim serijama, doručak spremamo po porudžbini, a tegle punimo svakog jutra.",
@@ -53,6 +85,38 @@ const en: Dictionary = {
     whatsapp: "Message us on WhatsApp",
     openMenu: "Open menu",
     closeMenu: "Close menu",
+  },
+  home: {
+    heroEyebrow: "Belgrade",
+    heroTitle: "Coffee that takes its time.",
+    heroLead:
+      "A bistro and coffee bar where breakfast runs until noon and the conversation runs longer.",
+    scroll: "Scroll",
+    statementTitle: "It all starts with the bean.",
+    statementBody:
+      "We pick small roasteries, rotate the beans every week and dial in the grinder every morning. What reaches the cup is the sum of those small decisions.",
+    signatureEyebrow: "Signature",
+    signatureTitle: "How Jar No. 1 is made",
+    signatureSteps: [
+      {
+        title: "Double espresso",
+        body: "Freshly ground beans and a twenty-seven second extraction.",
+      },
+      {
+        title: "Vanilla cream",
+        body: "Whipped in the morning, with real vanilla and no icing sugar.",
+      },
+      {
+        title: "Salted caramel",
+        body: "Cooked down to dark amber, with a pinch of sea salt.",
+      },
+      {
+        title: "Layered in the jar",
+        body: "Layer by layer, so every sip tastes a little different.",
+      },
+    ],
+    ctaTitle: "See you in the morning.",
+    ctaBody: "Reserve a table or write to us — we reply on WhatsApp.",
   },
   menu: {
     intro:

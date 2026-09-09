@@ -14,3 +14,5 @@ export const site = {
 };
 
 export const whatsappUrl = `https://wa.me/${site.whatsappNumber}`;
+
+export const storyVideo = "/videos/coffee-shop-scroll-driven-video-compressed.mp4";

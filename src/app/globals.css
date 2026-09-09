@@ -57,6 +57,28 @@
   }
 }
 
+/*
+  Scroll-animation start states live in CSS, not in GSAP's from() values: the server HTML
+  paints before hydration, so setting them in JS would flash the finished state first.
+*/
+@media (prefers-reduced-motion: no-preference) {
+  [data-hero],
+  [data-reveal] > * {
+    opacity: 0;
+  }
+
+  [data-step] {
+    position: absolute;
+    inset: 0;
+    margin-bottom: 0;
+    opacity: 0;
+  }
+
+  [data-step]:first-child {
+    opacity: 1;
+  }
+}
+
 @utility eyebrow {
   font-size: var(--text-eyebrow);
   letter-spacing: var(--text-eyebrow--letter-spacing);

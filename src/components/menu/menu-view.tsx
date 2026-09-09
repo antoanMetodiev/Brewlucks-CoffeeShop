@@ -51,7 +51,7 @@ export function MenuView() {
 
   return (
     <>
-      <section className="mx-auto max-w-[110rem] px-6 pb-14 pt-8 md:px-10 md:pb-20">
+      <section className="mx-auto max-w-[110rem] px-6 pb-14 pt-32 md:px-10 md:pb-20">
         <p className="eyebrow">Bistro &amp; Jars</p>
         <h1 className="mt-6 font-display text-headline font-light">{t.nav.menu}</h1>
         <p className="mt-6 max-w-xl text-sm leading-relaxed text-muted">{t.menu.intro}</p>
