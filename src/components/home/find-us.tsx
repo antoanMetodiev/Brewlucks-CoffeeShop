@@ -23,13 +23,13 @@ export function FindUs() {
       </div>
 
       <div data-reveal className="mt-14 grid gap-4 md:mt-20 md:grid-cols-2 md:gap-8">
-        <div className="relative h-72 overflow-hidden rounded-2xl md:h-[28rem]">
+        <div className="photo-frame relative h-72 overflow-hidden rounded-2xl md:h-[28rem]">
           <Image
             src="/images/venue/terrace.webp"
             alt="Bistro & Jars street terrace"
             fill
             sizes="(min-width: 768px) 50vw, 100vw"
-            className="object-cover"
+            className="object-cover brightness-90"
           />
         </div>
         <div className="relative h-72 overflow-hidden rounded-2xl border border-border md:h-[28rem]">

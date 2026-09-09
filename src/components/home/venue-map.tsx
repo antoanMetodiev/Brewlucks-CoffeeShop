@@ -22,7 +22,7 @@ export function VenueMap() {
   return (
     <MapContainer
       center={[lat, lng]}
-      zoom={15}
+      zoom={17}
       scrollWheelZoom={false}
       className="h-full w-full"
     >

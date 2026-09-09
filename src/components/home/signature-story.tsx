@@ -82,13 +82,13 @@ export function SignatureStory() {
                 <p className="mt-3 text-sm leading-relaxed text-muted">{step.body[lang]}</p>
               </div>
 
-              <div className="relative order-1 h-[30vh] w-full shrink-0 overflow-hidden rounded-2xl md:order-2 md:aspect-[4/5] md:h-[46vh] md:w-auto">
+              <div className="photo-frame relative order-1 h-[30vh] w-full shrink-0 overflow-hidden rounded-2xl md:order-2 md:aspect-[4/5] md:h-[46vh] md:w-auto">
                 <Image
                   src={step.image}
                   alt={step.title[lang]}
                   fill
                   sizes="(min-width: 768px) 30vw, 100vw"
-                  className="object-cover"
+                  className="object-cover brightness-90"
                 />
               </div>
             </article>

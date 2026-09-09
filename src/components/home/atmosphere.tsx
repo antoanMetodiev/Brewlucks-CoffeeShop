@@ -25,22 +25,22 @@ export function Atmosphere() {
       </div>
 
       <div data-reveal className="mt-14 grid grid-cols-2 gap-4 md:mt-20 md:gap-8">
-        <div className="relative aspect-[3/4] overflow-hidden rounded-2xl">
+        <div className="photo-frame relative aspect-[3/4] overflow-hidden rounded-2xl">
           <Image
             src="/images/venue/terrace.webp"
             alt="Bistro & Jars street terrace"
             fill
             sizes="(min-width: 768px) 40vw, 45vw"
-            className="object-cover"
+            className="object-cover brightness-90"
           />
         </div>
-        <div className="relative mt-10 aspect-[3/4] overflow-hidden rounded-2xl md:mt-20">
+        <div className="photo-frame relative mt-10 aspect-[3/4] overflow-hidden rounded-2xl md:mt-20">
           <Image
             src="/images/venue/second-image.jpg"
             alt="Bistro & Jars interior bar"
             fill
             sizes="(min-width: 768px) 40vw, 45vw"
-            className="object-cover"
+            className="object-cover brightness-90"
           />
         </div>
       </div>

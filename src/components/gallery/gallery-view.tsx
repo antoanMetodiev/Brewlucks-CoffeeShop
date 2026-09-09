@@ -84,14 +84,14 @@ export function GalleryView() {
                 type="button"
                 onClick={() => setActiveIndex(index)}
                 aria-label={`${t.gallery.open} — ${item.caption[lang]}`}
-                className="group block w-full overflow-hidden rounded-2xl"
+                className="photo-frame group block w-full overflow-hidden rounded-2xl"
               >
                 <Image
                   src={item.image}
                   alt={item.caption[lang]}
                   placeholder="blur"
                   unoptimized
-                  className="w-full transition-transform duration-700 ease-editorial group-hover:scale-[1.04]"
+                  className="w-full brightness-90 transition-transform duration-700 ease-editorial group-hover:scale-[1.04]"
                 />
               </button>
               <figcaption className="mt-3 text-sm leading-relaxed text-muted">
@@ -126,7 +126,7 @@ export function GalleryView() {
             placeholder="blur"
             unoptimized
             onClick={(event) => event.stopPropagation()}
-            className="h-auto max-h-[68vh] w-full max-w-2xl rounded-2xl object-contain"
+            className="photo-frame h-auto max-h-[68vh] w-full max-w-2xl rounded-2xl object-contain brightness-90"
           />
 
           <div
