@@ -39,7 +39,7 @@ Instead of a standard contact form, inquiries and reservation requests are sent 
 
 ## Open Questions / To Clarify Later
 - Exact WhatsApp Cloud API flow: business number, Meta app setup, message template requirements/approval
-- Language toggle implementation approach (e.g., `next-intl`, custom context, static dictionaries)
+- Language toggle: implemented as a React context over static dictionaries (`src/i18n/`), persisted in `localStorage` via `useSyncExternalStore`. Keeps every page statically prerendered, at the cost of a brief Serbian-first paint for returning English visitors. Switch to a cookie read in the root layout if that flash needs to go (trades static prerender for per-request rendering).
 - Video hosting/delivery strategy (self-hosted vs. CDN, format/compression for scroll-driven playback)
 - Specific milestone breakdown for the 2–3 week timeline
 - Brand direction document and asset folder — not yet received

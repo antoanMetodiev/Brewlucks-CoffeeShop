@@ -1,26 +1,66 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-bg: #0b0908;
+  --color-surface: #141010;
+  --color-elevated: #1c1715;
+  --color-fg: #f2ece3;
+  --color-muted: #9c948b;
+  --color-accent: #c09a63;
+  --color-border: #2a231d;
+
+  --text-display: clamp(3rem, 9vw, 8rem);
+  --text-display--line-height: 0.92;
+  --text-display--letter-spacing: -0.02em;
+
+  --text-headline: clamp(2rem, 5vw, 4rem);
+  --text-headline--line-height: 1.05;
+  --text-headline--letter-spacing: -0.015em;
+
+  --text-title: clamp(1.5rem, 3vw, 2.25rem);
+  --text-title--line-height: 1.2;
+
+  --text-eyebrow: 0.6875rem;
+  --text-eyebrow--line-height: 1.2;
+  --text-eyebrow--letter-spacing: 0.22em;
+
+  --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/* Inlined so the utilities emit var(--font-cormorant) directly — next/font declares it on <body>, not :root. */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-cormorant), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    background-color: var(--color-bg);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-bg);
+  }
+
+  :focus-visible {
+    outline: 1px solid var(--color-accent);
+    outline-offset: 3px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@utility eyebrow {
+  font-size: var(--text-eyebrow);
+  letter-spacing: var(--text-eyebrow--letter-spacing);
+  line-height: var(--text-eyebrow--line-height);
+  text-transform: uppercase;
+  color: var(--color-muted);
 }
