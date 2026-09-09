@@ -4,7 +4,10 @@ export const site = {
   address: {
     street: "Ulica i broj",
     city: "Beograd, Srbija",
-    mapsUrl: "https://maps.google.com",
+    // Placeholder pin — Republic Square, central Belgrade. Not the venue's real location.
+    // Replace with the real coordinates (and mapsUrl below) once the client confirms the address.
+    coordinates: { lat: 44.8125, lng: 20.4612 },
+    mapsUrl: "https://www.google.com/maps/search/?api=1&query=44.8125,20.4612",
   },
   whatsappNumber: "381600000000",
   instagram: {

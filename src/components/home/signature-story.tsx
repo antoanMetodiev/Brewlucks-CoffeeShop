@@ -22,7 +22,7 @@ export function SignatureStory() {
         gsap.set(steps.slice(1), { y: 28 });
         gsap.set(images.slice(1), { scale: 1.08 });
 
-        const range = `+=${steps.length * 85}%`;
+        const range = `+=${steps.length * 55}%`;
 
         const timeline = gsap.timeline({
           scrollTrigger: {

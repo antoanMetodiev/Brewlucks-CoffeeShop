@@ -5,6 +5,7 @@ import { useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { useLanguage } from "@/i18n/language-provider";
 import { Atmosphere } from "./atmosphere";
+import { FindUs } from "./find-us";
 import { Hero } from "./hero";
 import { SignatureStory } from "./signature-story";
 
@@ -75,6 +76,8 @@ export function HomeView() {
           </div>
         </div>
       </section>
+
+      <FindUs />
     </div>
   );
 }
