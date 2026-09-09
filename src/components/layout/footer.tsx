@@ -36,9 +36,9 @@ export function Footer() {
           <div>
             <p className="eyebrow">{t.footer.hours}</p>
             <p className="mt-5 text-sm leading-relaxed text-fg">
-              {t.footer.hoursWeekdays}
+              {t.footer.hoursAll}
               <br />
-              {t.footer.hoursWeekend}
+              <span className="tabular-nums">{t.footer.hoursTime}</span>
             </p>
           </div>
 

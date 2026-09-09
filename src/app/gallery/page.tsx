@@ -1,13 +1,11 @@
-"use client";
+import type { Metadata } from "next";
+import { GalleryView } from "@/components/gallery/gallery-view";
 
-import { useLanguage } from "@/i18n/language-provider";
+export const metadata: Metadata = {
+  title: "Galerija",
+  description: "Tanjiri, čaše i uglovi koje najčešće pamtite. — A look inside Bistro & Jars.",
+};
 
 export default function GalleryPage() {
-  const { t } = useLanguage();
-
-  return (
-    <section className="mx-auto max-w-[110rem] px-6 pb-24 pt-32 md:px-10">
-      <h1 className="font-display text-headline font-light">{t.nav.gallery}</h1>
-    </section>
-  );
+  return <GalleryView />;
 }

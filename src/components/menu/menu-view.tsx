@@ -20,8 +20,11 @@ export function MenuView() {
     const onScroll = () => {
       const reachedBottom =
         window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+      // A section counts as current once its heading has risen into the upper third of the
+      // viewport — waiting for its top edge to clear the sticky bar highlights it far too late.
+      const threshold = window.innerHeight * 0.35;
       const started = sections.filter(
-        (section) => section.getBoundingClientRect().top <= STICKY_OFFSET + 8,
+        (section) => section.getBoundingClientRect().top <= threshold,
       );
       const current = reachedBottom ? sections.at(-1) : started.at(-1);
       setActiveId((current ?? sections[0]).id);
@@ -53,7 +56,7 @@ export function MenuView() {
     <>
       <section className="mx-auto max-w-[110rem] px-6 pb-14 pt-32 md:px-10 md:pb-20">
         <p className="eyebrow">Bistro &amp; Jars</p>
-        <h1 className="mt-6 font-display text-headline font-light">{t.nav.menu}</h1>
+        <h1 className="mt-6 font-display text-headline font-normal">{t.nav.menu}</h1>
         <p className="mt-6 max-w-xl text-sm leading-relaxed text-muted">{t.menu.intro}</p>
       </section>
 
@@ -62,7 +65,7 @@ export function MenuView() {
           <div
             ref={navRef}
             aria-label={t.menu.categories}
-            className="flex gap-7 overflow-x-auto py-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="flex gap-2 overflow-x-auto py-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {menu.map((category) => (
               <button
@@ -71,8 +74,10 @@ export function MenuView() {
                 data-chip={category.id}
                 onClick={() => jumpTo(category.id)}
                 aria-current={activeId === category.id}
-                className={`shrink-0 text-sm transition-colors duration-300 ${
-                  activeId === category.id ? "text-accent" : "text-muted hover:text-fg"
+                className={`shrink-0 rounded-full px-4 py-2 text-sm transition-colors duration-400 ease-soft ${
+                  activeId === category.id
+                    ? "bg-elevated text-accent"
+                    : "text-muted hover:bg-surface hover:text-fg"
                 }`}
               >
                 {category.title[lang]}
@@ -90,7 +95,7 @@ export function MenuView() {
             className="border-t border-border py-14 first:border-t-0 md:py-20"
           >
             <div className="grid gap-8 md:grid-cols-[minmax(0,16rem)_minmax(0,44rem)] md:gap-20">
-              <h2 className="font-display text-title font-light md:sticky md:top-36 md:self-start">
+              <h2 className="font-display text-title font-normal md:sticky md:top-36 md:self-start">
                 {category.title[lang]}
               </h2>
 

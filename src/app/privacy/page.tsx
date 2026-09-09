@@ -7,7 +7,7 @@ export default function PrivacyPage() {
 
   return (
     <section className="mx-auto max-w-[110rem] px-6 pb-24 pt-32 md:px-10">
-      <h1 className="font-display text-headline font-light">{t.nav.privacy}</h1>
+      <h1 className="font-display text-headline font-normal">{t.nav.privacy}</h1>
     </section>
   );
 }

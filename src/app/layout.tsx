@@ -1,20 +1,19 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Inter } from "next/font/google";
+import { DM_Sans, Fraunces } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/i18n/language-provider";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 
-const cormorant = Cormorant_Garamond({
+const fraunces = Fraunces({
   subsets: ["latin", "latin-ext"],
-  weight: ["300", "400", "500"],
-  variable: "--font-cormorant",
+  variable: "--font-display-family",
   display: "swap",
 });
 
-const inter = Inter({
+const dmSans = DM_Sans({
   subsets: ["latin", "latin-ext"],
-  variable: "--font-inter",
+  variable: "--font-body-family",
   display: "swap",
 });
 
@@ -29,7 +28,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="sr" suppressHydrationWarning>
-      <body className={`${cormorant.variable} ${inter.variable} antialiased`}>
+      <body className={`${fraunces.variable} ${dmSans.variable} antialiased`}>
         <LanguageProvider>
           <Header />
           <main className="min-h-dvh">{children}</main>

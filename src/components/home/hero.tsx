@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { useLanguage } from "@/i18n/language-provider";
-import { storyVideo } from "@/lib/site";
+import { heroVideo } from "@/lib/site";
 
 export function Hero() {
   const root = useRef<HTMLElement>(null);
@@ -49,15 +49,16 @@ export function Hero() {
     <section ref={root} className="relative h-dvh overflow-hidden">
       <video
         ref={video}
-        className="absolute inset-0 h-full w-full object-cover"
-        src={storyVideo}
+        className="absolute inset-0 h-full w-full scale-105 object-cover blur-[1px]"
+        src={heroVideo}
         autoPlay
         muted
         loop
         playsInline
         preload="auto"
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-bg/80 via-bg/40 to-bg" />
+      <div className="absolute inset-0 bg-bg/55" />
+      <div className="absolute inset-0 bg-gradient-to-b from-bg/70 via-transparent to-bg" />
 
       <div
         ref={content}
@@ -66,7 +67,7 @@ export function Hero() {
         <p className="eyebrow" data-hero>
           {t.home.heroEyebrow}
         </p>
-        <h1 className="mt-6 max-w-[16ch] font-display text-display font-light" data-hero>
+        <h1 className="mt-6 max-w-[16ch] font-display text-display font-normal" data-hero>
           {t.home.heroTitle}
         </h1>
         <p className="mt-8 max-w-md text-sm leading-relaxed text-muted" data-hero>
@@ -74,9 +75,14 @@ export function Hero() {
         </p>
       </div>
 
-      <p className="absolute bottom-10 right-6 z-10 text-[0.6875rem] uppercase tracking-[0.22em] text-muted md:right-10">
-        {t.home.scroll}
-      </p>
+      <div className="absolute bottom-10 right-6 z-10 flex items-center gap-4 md:right-10">
+        <span className="text-[0.6875rem] uppercase tracking-[0.22em] text-muted">
+          {t.home.scroll}
+        </span>
+        <span className="relative h-10 w-px overflow-hidden bg-border">
+          <span className="absolute inset-x-0 top-0 h-4 bg-accent motion-safe:animate-scroll-cue" />
+        </span>
+      </div>
     </section>
   );
 }

@@ -1,5 +1,7 @@
 export type Language = "sr" | "en";
 
+export type Localized = Record<Language, string>;
+
 const sr = {
   nav: {
     home: "Početna",
@@ -16,50 +18,41 @@ const sr = {
   },
   home: {
     heroEyebrow: "Beograd",
-    heroTitle: "Kafa koja se ne žuri.",
+    heroTitle: "Dobra hrana, bez žurbe.",
     heroLead:
-      "Bistro i kafe bar u kojem se doručak servira do podneva, a razgovor traje duže.",
+      "Bistro i kafe bar — od doručka do večere, uz dobru kafu i mesto da se zadržite.",
     scroll: "Skrolujte",
-    statementTitle: "Sve počinje od zrna.",
+    statementTitle: "Sve počinje za stolom.",
     statementBody:
-      "Biramo male pržionice, menjamo zrno svake nedelje i podešavamo mlin svakog jutra. Ono što stigne do šoljice je zbir tih sitnih odluka.",
+      "Doručak koji se ne žuri, ručak koji se deli i večera koja traje. Kafa je tu od jutra do kasno.",
     signatureEyebrow: "Potpis kuće",
     signatureTitle: "Kako nastaje Jar No. 1",
-    signatureSteps: [
-      {
-        title: "Dupli espresso",
-        body: "Sveže mleveno zrno i ekstrakcija od dvadeset sedam sekundi.",
-      },
-      {
-        title: "Krem od vanile",
-        body: "Mutimo ga ujutru, sa pravom vanilom i bez šećera u prahu.",
-      },
-      {
-        title: "Slani karamel",
-        body: "Kuvan do tamnog ćilibara, sa prstohvatom morske soli.",
-      },
-      {
-        title: "Slaganje u teglu",
-        body: "Sloj po sloj, da svaki gutljaj bude malo drugačiji.",
-      },
-    ],
-    ctaTitle: "Vidimo se ujutru.",
+    atmosphereEyebrow: "Prostor",
+    atmosphereTitle: "Bašta ispred, bar iznutra.",
+    atmosphereCta: "Pogledajte galeriju",
+    ctaTitle: "Vidimo se uskoro.",
     ctaBody: "Rezervišite sto ili nam pišite — javljamo se na WhatsApp-u.",
   },
+  gallery: {
+    intro: "Tanjiri, čaše i uglovi koje najčešće pamtite.",
+    open: "Otvori sliku",
+    close: "Zatvori",
+    previous: "Prethodna",
+    next: "Sledeća",
+  },
   menu: {
-    intro:
-      "Kafu pržimo u malim serijama, doručak spremamo po porudžbini, a tegle punimo svakog jutra.",
+    intro: "Doručak, roštilj, burgeri i nešto slatko — od jutra do kasno.",
     categories: "Kategorije",
     signature: "Potpis",
     prices: "Sve cene su u dinarima, sa uračunatim PDV-om.",
     allergens: "Za alergene i sastojke pitajte naše osoblje.",
   },
   footer: {
-    tagline: "Kafa, hrana i sporo jutro u srcu grada.",
+    tagline: "Hrana, kafa i mesto da se zadržite — od jutra do kasno.",
     visit: "Poseti nas",
     hours: "Radno vreme",
-    hoursWeekdays: "Ponedeljak — Petak · 08—22h",
-    hoursWeekend: "Subota — Nedelja · 09—23h",
+    hoursAll: "Ponedeljak — Nedelja",
+    hoursTime: "07:30 — 23:30",
     connect: "Poveži se",
     rights: "Sva prava zadržana.",
   },
@@ -88,50 +81,41 @@ const en: Dictionary = {
   },
   home: {
     heroEyebrow: "Belgrade",
-    heroTitle: "Coffee that takes its time.",
+    heroTitle: "Good food, unhurried.",
     heroLead:
-      "A bistro and coffee bar where breakfast runs until noon and the conversation runs longer.",
+      "A bistro and coffee bar — from breakfast to dinner, good coffee, and a reason to stay.",
     scroll: "Scroll",
-    statementTitle: "It all starts with the bean.",
+    statementTitle: "It starts at the table.",
     statementBody:
-      "We pick small roasteries, rotate the beans every week and dial in the grinder every morning. What reaches the cup is the sum of those small decisions.",
+      "Breakfast that isn't rushed, lunch worth sharing, dinner that lingers. Coffee, from morning until late.",
     signatureEyebrow: "Signature",
     signatureTitle: "How Jar No. 1 is made",
-    signatureSteps: [
-      {
-        title: "Double espresso",
-        body: "Freshly ground beans and a twenty-seven second extraction.",
-      },
-      {
-        title: "Vanilla cream",
-        body: "Whipped in the morning, with real vanilla and no icing sugar.",
-      },
-      {
-        title: "Salted caramel",
-        body: "Cooked down to dark amber, with a pinch of sea salt.",
-      },
-      {
-        title: "Layered in the jar",
-        body: "Layer by layer, so every sip tastes a little different.",
-      },
-    ],
-    ctaTitle: "See you in the morning.",
+    atmosphereEyebrow: "The Space",
+    atmosphereTitle: "Terrace out front, bar within.",
+    atmosphereCta: "View the gallery",
+    ctaTitle: "See you soon.",
     ctaBody: "Reserve a table or write to us — we reply on WhatsApp.",
   },
+  gallery: {
+    intro: "The plates, the glasses and the corners people remember.",
+    open: "Open image",
+    close: "Close",
+    previous: "Previous",
+    next: "Next",
+  },
   menu: {
-    intro:
-      "We roast our coffee in small batches, cook breakfast to order, and fill the jars every morning.",
+    intro: "Breakfast, the grill, burgers and something sweet — from morning until late.",
     categories: "Categories",
     signature: "Signature",
     prices: "All prices are in Serbian dinars, VAT included.",
     allergens: "Ask our staff about allergens and ingredients.",
   },
   footer: {
-    tagline: "Coffee, food and slow mornings in the heart of the city.",
+    tagline: "Food, coffee and a place to linger — from morning until late.",
     visit: "Visit us",
     hours: "Opening hours",
-    hoursWeekdays: "Monday — Friday · 08—22h",
-    hoursWeekend: "Saturday — Sunday · 09—23h",
+    hoursAll: "Monday — Sunday",
+    hoursTime: "07:30 — 23:30",
     connect: "Connect",
     rights: "All rights reserved.",
   },

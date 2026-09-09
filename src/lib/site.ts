@@ -15,4 +15,6 @@ export const site = {
 
 export const whatsappUrl = `https://wa.me/${site.whatsappNumber}`;
 
-export const storyVideo = "/videos/coffee-shop-scroll-driven-video-compressed.mp4";
+// Real venue footage (Google Maps contributor clip, 568×320 — a placeholder until the client
+// sends proper hero footage; will look soft at full-bleed sizes).
+export const heroVideo = "/videos/venue-reference.mp4";

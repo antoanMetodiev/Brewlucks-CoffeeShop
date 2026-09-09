@@ -7,7 +7,7 @@ export default function ContactPage() {
 
   return (
     <section className="mx-auto max-w-[110rem] px-6 pb-24 pt-32 md:px-10">
-      <h1 className="font-display text-headline font-light">{t.nav.contact}</h1>
+      <h1 className="font-display text-headline font-normal">{t.nav.contact}</h1>
     </section>
   );
 }
