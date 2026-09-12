@@ -74,7 +74,7 @@ export function Header() {
           <LanguageToggle />
           <Link
             href="/contact"
-            className="hidden rounded-full border border-border px-5 py-2.5 text-[0.6875rem] uppercase tracking-[0.18em] text-fg transition-colors duration-400 ease-soft hover:border-accent hover:text-accent md:inline-block"
+            className="hidden rounded-full bg-accent px-5 py-2.5 text-[0.6875rem] uppercase tracking-[0.18em] text-bg transition-all duration-400 ease-soft hover:brightness-110 md:inline-block"
           >
             {t.actions.reserve}
           </Link>

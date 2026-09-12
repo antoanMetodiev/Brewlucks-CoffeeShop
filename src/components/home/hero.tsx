@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { useLanguage } from "@/i18n/language-provider";
@@ -19,14 +20,7 @@ export function Hero() {
         gsap.fromTo(
           "[data-hero]",
           { y: 40, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 1.4,
-            stagger: 0.12,
-            delay: 0.2,
-            ease: "power3.out",
-          },
+          { y: 0, opacity: 1, duration: 1.4, stagger: 0.12, delay: 0.2, ease: "power3.out" },
         );
 
         const scrub = {
@@ -62,17 +56,47 @@ export function Hero() {
 
       <div
         ref={content}
-        className="relative z-10 mx-auto flex h-full max-w-[110rem] flex-col justify-end px-6 pb-24 md:px-10 md:pb-28"
+        className="relative z-10 mx-auto flex h-full max-w-[110rem] flex-col justify-end px-6 pb-28 md:px-10 md:pb-32"
       >
-        <p className="eyebrow" data-hero>
-          {t.home.heroEyebrow}
-        </p>
-        <h1 className="mt-6 max-w-[16ch] font-display text-display font-normal" data-hero>
-          {t.home.heroTitle}
-        </h1>
-        <p className="mt-8 max-w-md text-sm leading-relaxed text-muted" data-hero>
-          {t.home.heroLead}
-        </p>
+        <div className="grid gap-12 md:grid-cols-[minmax(0,1fr)_minmax(0,18rem)] md:items-end">
+          <div>
+            <p className="eyebrow" data-hero>
+              {t.home.heroEyebrow}
+            </p>
+            <h1 className="mt-6 max-w-[14ch] font-display text-display font-normal" data-hero>
+              {t.home.heroTitle}
+            </h1>
+            <p className="mt-8 max-w-md text-sm leading-relaxed text-muted" data-hero>
+              {t.home.heroLead}
+            </p>
+            <div className="mt-10 flex flex-wrap gap-4" data-hero>
+              <Link
+                href="/menu"
+                className="rounded-full bg-accent px-8 py-4 text-[0.6875rem] uppercase tracking-[0.18em] text-bg transition-all duration-400 ease-soft hover:brightness-110"
+              >
+                {t.home.heroMenuCta}
+              </Link>
+              <Link
+                href="/contact"
+                className="rounded-full border border-fg/30 px-8 py-4 text-[0.6875rem] uppercase tracking-[0.18em] backdrop-blur transition-colors duration-400 ease-soft hover:border-accent hover:text-accent"
+              >
+                {t.actions.reserve}
+              </Link>
+            </div>
+          </div>
+
+          <div
+            data-hero
+            className="hidden rounded-2xl border border-fg/10 bg-bg/40 p-6 backdrop-blur-xl md:block"
+          >
+            <p className="flex items-center gap-2 text-[0.6875rem] uppercase tracking-[0.2em] text-accent">
+              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+              {t.home.heroOpenNow}
+            </p>
+            <p className="mt-4 text-sm text-fg">{t.footer.hoursAll}</p>
+            <p className="font-display text-2xl tabular-nums">{t.footer.hoursTime}</p>
+          </div>
+        </div>
       </div>
 
       <div className="absolute bottom-10 right-6 z-10 flex items-center gap-4 md:right-10">

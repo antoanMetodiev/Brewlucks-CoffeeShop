@@ -4,7 +4,7 @@ import { useLanguage } from "@/i18n/language-provider";
 import type { Language } from "@/i18n/dictionaries";
 
 const options: { code: Language; short: string }[] = [
-  { code: "sr", short: "SR" },
+  { code: "bg", short: "BG" },
   { code: "en", short: "EN" },
 ];
 

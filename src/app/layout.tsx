@@ -4,6 +4,7 @@ import "./globals.css";
 import { LanguageProvider } from "@/i18n/language-provider";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { getCatalog } from "@/lib/catalog/catalog";
 
 const fraunces = Fraunces({
   subsets: ["latin", "latin-ext"],
@@ -25,14 +26,17 @@ export const metadata: Metadata = {
   description: "Kafa, hrana i sporo jutro u srcu grada. — Coffee, food and slow mornings in the heart of the city.",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const catalog = await getCatalog();
+  const footerSections = catalog.map((section) => ({ id: section.id, title: section.title }));
+
   return (
-    <html lang="sr" suppressHydrationWarning>
+    <html lang="bg" suppressHydrationWarning>
       <body className={`${fraunces.variable} ${dmSans.variable} antialiased`}>
         <LanguageProvider>
           <Header />
           <main className="min-h-dvh">{children}</main>
-          <Footer />
+          <Footer sections={footerSections} />
         </LanguageProvider>
       </body>
     </html>

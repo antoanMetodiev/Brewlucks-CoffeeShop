@@ -1,14 +1,7 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import Image from "next/image";
 import { useLanguage } from "@/i18n/language-provider";
 import { site } from "@/lib/site";
-
-const VenueMap = dynamic(() => import("./venue-map").then((mod) => mod.VenueMap), {
-  ssr: false,
-  loading: () => <div className="h-full w-full animate-pulse bg-surface" />,
-});
 
 export function FindUs() {
   const { t } = useLanguage();
@@ -22,18 +15,15 @@ export function FindUs() {
         </h2>
       </div>
 
-      <div data-reveal className="mt-14 grid gap-4 md:mt-20 md:grid-cols-2 md:gap-8">
-        <div className="photo-frame relative h-72 overflow-hidden rounded-2xl md:h-[28rem]">
-          <Image
-            src="/images/venue/terrace.webp"
-            alt="Bistro & Jars street terrace"
-            fill
-            sizes="(min-width: 768px) 50vw, 100vw"
-            className="object-cover brightness-90"
-          />
-        </div>
+      <div data-reveal className="mt-14 md:mt-20">
         <div className="relative h-72 overflow-hidden rounded-2xl border border-border md:h-[28rem]">
-          <VenueMap />
+          <iframe
+            title={`${site.name} — ${t.home.findUsTitle}`}
+            src={`https://www.google.com/maps?q=${site.address.coordinates.lat},${site.address.coordinates.lng}&z=17&output=embed`}
+            className="h-full w-full"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
         </div>
       </div>
 

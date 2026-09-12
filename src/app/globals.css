@@ -89,17 +89,6 @@
     opacity: 0;
     transform: translateY(2rem);
   }
-
-  [data-step] {
-    position: absolute;
-    inset: 0;
-    margin-bottom: 0;
-    opacity: 0;
-  }
-
-  [data-step]:first-child {
-    opacity: 1;
-  }
 }
 
 @utility eyebrow {
@@ -114,13 +103,4 @@
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.1),
     0 24px 48px -24px rgba(255, 255, 255, 0.14);
-}
-
-/*
-  No dark tile provider works without an API key anymore (CartoDB gated theirs), so we invert
-  free/keyless OpenStreetMap tiles instead. Only targets the tile layer's own container, not the
-  marker pane, so the accent-colored pin stays true to its real color.
-*/
-.map-tiles-dark {
-  filter: invert(1) hue-rotate(180deg) brightness(0.92) contrast(0.88) saturate(0.6);
 }

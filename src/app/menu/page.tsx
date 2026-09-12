@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import { MenuView } from "@/components/menu/menu-view";
+import { getCatalog } from "@/lib/catalog/catalog";
 
 export const metadata: Metadata = {
-  title: "Meni",
+  title: "Меню",
   description:
-    "Kafa iz malih serija, doručak po porudžbini i tegle koje punimo svakog jutra. — The full Bistro & Jars menu.",
+    "Закуска, основни, паста, десерти, кафе и напитки. — The full Bistro & Jars menu, with photos.",
 };
 
-export default function MenuPage() {
-  return <MenuView />;
+export default async function MenuPage() {
+  const catalog = await getCatalog();
+  return <MenuView catalog={catalog} />;
 }

@@ -2,18 +2,18 @@
 export const site = {
   name: "Bistro & Jars",
   address: {
-    street: "Ulica i broj",
-    city: "Beograd, Srbija",
-    // Placeholder pin — Republic Square, central Belgrade. Not the venue's real location.
+    street: "Ulitsa i nomer",
+    city: "Sofia, Bulgaria",
+    // Placeholder pin — National Assembly Square, central Sofia. Not the venue's real location.
     // Replace with the real coordinates (and mapsUrl below) once the client confirms the address.
-    coordinates: { lat: 44.8125, lng: 20.4612 },
-    mapsUrl: "https://www.google.com/maps/search/?api=1&query=44.8125,20.4612",
+    coordinates: { lat: 42.6953, lng: 23.3327 },
+    mapsUrl: "https://www.google.com/maps/search/?api=1&query=42.6953,23.3327",
   },
-  whatsappNumber: "381600000000",
+  whatsappNumber: "359880000000",
   // Placeholder — replace with the venue's real registered legal name and contact email
   // once available; used on the privacy policy as the data controller's identity.
-  legalName: "Bistro & Jars d.o.o.",
-  privacyEmail: "privacy@bistroandjars.rs",
+  legalName: "Bistro & Jars EOOD",
+  privacyEmail: "privacy@bistroandjars.bg",
   instagram: {
     handle: "@bistroandjars",
     url: "https://instagram.com",
@@ -21,6 +21,10 @@ export const site = {
 };
 
 export const whatsappUrl = `https://wa.me/${site.whatsappNumber}`;
+
+export function whatsappMessageUrl(text: string) {
+  return `${whatsappUrl}?text=${encodeURIComponent(text)}`;
+}
 
 // Real venue footage (Google Maps contributor clip, 568×320 — a placeholder until the client
 // sends proper hero footage; will look soft at full-bleed sizes).

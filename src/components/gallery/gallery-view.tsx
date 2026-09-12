@@ -1,25 +1,80 @@
 "use client";
 
-import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
+import Image, { type StaticImageData } from "next/image";
+import Link from "next/link";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { useLanguage } from "@/i18n/language-provider";
-import { galleryItems } from "@/content/gallery";
+import type { Dictionary } from "@/i18n/dictionaries";
+import { venuePhotos } from "@/content/gallery";
+import { productHref } from "@/lib/catalog/format";
+import type { Product } from "@/lib/catalog/types";
 
-export function GalleryView() {
+type Group = "food" | "drinks" | "venue";
+type Filter = "all" | Group;
+
+type GalleryItem = {
+  key: string;
+  group: Group;
+  src: string | StaticImageData;
+  caption: string;
+  href?: string;
+};
+
+const filters: { id: Filter; label: (t: Dictionary) => string }[] = [
+  { id: "all", label: (t) => t.gallery.filterAll },
+  { id: "food", label: (t) => t.gallery.filterFood },
+  { id: "drinks", label: (t) => t.gallery.filterDrinks },
+  { id: "venue", label: (t) => t.gallery.filterVenue },
+];
+
+// Interleave venue photos with product shots so the wall does not split into two blocks.
+function weave<T>(a: T[], b: T[]) {
+  const result: T[] = [];
+  const longest = Math.max(a.length, b.length);
+  for (let index = 0; index < longest; index++) {
+    if (a[index]) result.push(a[index]);
+    if (b[index]) result.push(b[index]);
+  }
+  return result;
+}
+
+export function GalleryView({ products }: { products: Product[] }) {
   const root = useRef<HTMLDivElement>(null);
   const closeButton = useRef<HTMLButtonElement>(null);
+  const [filter, setFilter] = useState<Filter>("all");
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const { t, lang } = useLanguage();
 
+  const items = useMemo<GalleryItem[]>(() => {
+    const venue: GalleryItem[] = venuePhotos.map((photo, index) => ({
+      key: `venue-${index}`,
+      group: "venue",
+      src: photo.image,
+      caption: photo.caption[lang],
+    }));
+    const shots: GalleryItem[] = products.map((product) => ({
+      key: `${product.kind}-${product.id}`,
+      group: product.kind === "meal" ? "food" : "drinks",
+      src: product.image,
+      caption: product.name,
+      href: productHref(product.kind, product.id),
+    }));
+    const all = weave(venue, shots);
+    return filter === "all" ? all : all.filter((item) => item.group === filter);
+  }, [products, filter, lang]);
+
   const close = useCallback(() => setActiveIndex(null), []);
 
-  const step = useCallback((direction: number) => {
-    setActiveIndex((current) => {
-      if (current === null) return current;
-      return (current + direction + galleryItems.length) % galleryItems.length;
-    });
-  }, []);
+  const step = useCallback(
+    (direction: number) => {
+      setActiveIndex((current) => {
+        if (current === null) return current;
+        return (current + direction + items.length) % items.length;
+      });
+    },
+    [items.length],
+  );
 
   useGSAP(
     () => {
@@ -42,7 +97,7 @@ export function GalleryView() {
 
       return () => mm.revert();
     },
-    { scope: root, dependencies: [lang], revertOnUpdate: true },
+    { scope: root, dependencies: [lang, filter], revertOnUpdate: true },
   );
 
   useEffect(() => {
@@ -66,36 +121,66 @@ export function GalleryView() {
     };
   }, [activeIndex, close, step]);
 
-  const active = activeIndex === null ? null : galleryItems[activeIndex];
+  const active = activeIndex === null ? null : items[activeIndex];
 
   return (
     <div ref={root}>
-      <section className="mx-auto max-w-[80rem] px-6 pb-16 pt-32 md:px-10">
+      <section className="mx-auto max-w-[110rem] px-6 pb-12 pt-32 md:px-10">
         <p className="eyebrow">Bistro &amp; Jars</p>
         <h1 className="mt-6 font-display text-headline font-normal">{t.nav.gallery}</h1>
         <p className="mt-6 max-w-xl text-sm leading-relaxed text-muted">{t.gallery.intro}</p>
+
+        <div className="mt-10 flex flex-wrap gap-2" role="tablist" aria-label={t.menu.categories}>
+          {filters.map((option) => (
+            <button
+              key={option.id}
+              type="button"
+              role="tab"
+              aria-selected={filter === option.id}
+              onClick={() => {
+                setFilter(option.id);
+                setActiveIndex(null);
+              }}
+              className={`rounded-full px-4 py-2 text-sm transition-colors duration-400 ease-soft ${
+                filter === option.id
+                  ? "bg-elevated text-accent"
+                  : "text-muted hover:bg-surface hover:text-fg"
+              }`}
+            >
+              {option.label(t)}
+            </button>
+          ))}
+        </div>
       </section>
 
-      <section className="mx-auto max-w-[80rem] px-6 pb-28 md:px-10 md:pb-40">
-        <div className="columns-2 gap-4 sm:columns-3 md:gap-6 lg:columns-4 xl:columns-5">
-          {galleryItems.map((item, index) => (
-            <figure key={index} data-gallery-item className="mb-4 break-inside-avoid md:mb-6">
+      <section className="mx-auto max-w-[110rem] px-6 pb-28 md:px-10 md:pb-40">
+        <div key={filter} className="columns-2 gap-4 sm:columns-3 md:gap-6 lg:columns-4 xl:columns-5">
+          {items.map((item, index) => (
+            <figure key={item.key} data-gallery-item className="mb-4 break-inside-avoid md:mb-6">
               <button
                 type="button"
                 onClick={() => setActiveIndex(index)}
-                aria-label={`${t.gallery.open} — ${item.caption[lang]}`}
-                className="photo-frame group block w-full overflow-hidden rounded-2xl"
+                aria-label={`${t.gallery.open} — ${item.caption}`}
+                className="photo-frame group block w-full overflow-hidden rounded-2xl bg-surface"
               >
                 <Image
-                  src={item.image}
-                  alt={item.caption[lang]}
-                  placeholder="blur"
-                  unoptimized
-                  className="w-full brightness-90 transition-transform duration-700 ease-editorial group-hover:scale-[1.04]"
+                  src={item.src}
+                  alt={item.caption}
+                  {...(typeof item.src === "string" ? { width: 700, height: 700 } : { placeholder: "blur" as const })}
+                  sizes="(min-width: 1280px) 18vw, (min-width: 1024px) 23vw, (min-width: 640px) 31vw, 48vw"
+                  className="h-auto w-full brightness-90 transition-transform duration-700 ease-editorial group-hover:scale-[1.04]"
                 />
               </button>
-              <figcaption className="mt-3 text-sm leading-relaxed text-muted">
-                {item.caption[lang]}
+              <figcaption className="mt-3 flex items-baseline justify-between gap-3 text-sm leading-relaxed text-muted">
+                <span>{item.caption}</span>
+                {item.href && (
+                  <Link
+                    href={item.href}
+                    className="shrink-0 text-[0.6875rem] uppercase tracking-[0.18em] text-accent"
+                  >
+                    {t.menu.viewItem} →
+                  </Link>
+                )}
               </figcaption>
             </figure>
           ))}
@@ -106,7 +191,7 @@ export function GalleryView() {
         <div
           role="dialog"
           aria-modal="true"
-          aria-label={active.caption[lang]}
+          aria-label={active.caption}
           onClick={close}
           className="fixed inset-0 z-[60] flex flex-col items-center justify-center gap-6 bg-bg/95 px-6 py-20 backdrop-blur-xl"
         >
@@ -121,10 +206,10 @@ export function GalleryView() {
           </button>
 
           <Image
-            src={active.image}
-            alt={active.caption[lang]}
-            placeholder="blur"
-            unoptimized
+            src={active.src}
+            alt={active.caption}
+            {...(typeof active.src === "string" ? { width: 700, height: 700 } : {})}
+            sizes="(min-width: 768px) 42rem, 100vw"
             onClick={(event) => event.stopPropagation()}
             className="photo-frame h-auto max-h-[68vh] w-full max-w-2xl rounded-2xl object-contain brightness-90"
           />
@@ -141,7 +226,17 @@ export function GalleryView() {
             >
               ←
             </button>
-            <p className="max-w-md text-center text-muted">{active.caption[lang]}</p>
+            <p className="max-w-md text-center text-muted">
+              {active.caption}
+              {active.href && (
+                <>
+                  {" "}
+                  <Link href={active.href} className="text-accent underline underline-offset-4">
+                    {t.menu.viewItem} →
+                  </Link>
+                </>
+              )}
+            </p>
             <button
               type="button"
               onClick={() => step(1)}
@@ -154,7 +249,7 @@ export function GalleryView() {
 
           <p className="text-[0.6875rem] tracking-[0.18em] text-muted tabular-nums">
             {String(activeIndex + 1).padStart(2, "0")} —{" "}
-            {String(galleryItems.length).padStart(2, "0")}
+            {String(items.length).padStart(2, "0")}
           </p>
         </div>
       )}

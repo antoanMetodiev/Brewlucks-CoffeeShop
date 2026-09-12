@@ -12,11 +12,11 @@ function subscribe(listener: () => void) {
 }
 
 function getSnapshot(): Language {
-  return window.localStorage.getItem(STORAGE_KEY) === "en" ? "en" : "sr";
+  return window.localStorage.getItem(STORAGE_KEY) === "en" ? "en" : "bg";
 }
 
 function getServerSnapshot(): Language {
-  return "sr";
+  return "bg";
 }
 
 type LanguageContextValue = {

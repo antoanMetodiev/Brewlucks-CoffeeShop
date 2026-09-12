@@ -2,21 +2,40 @@
 
 import Link from "next/link";
 import { useLanguage } from "@/i18n/language-provider";
+import type { Localized } from "@/i18n/dictionaries";
 import { getNavLinks } from "@/lib/navigation";
 import { site, whatsappUrl } from "@/lib/site";
 import { Wordmark } from "./wordmark";
 
-export function Footer() {
-  const { t } = useLanguage();
+export type FooterSection = { id: string; title: Localized };
+
+export function Footer({ sections }: { sections: FooterSection[] }) {
+  const { t, lang } = useLanguage();
   const links = getNavLinks(t);
 
   return (
     <footer className="border-t border-border bg-surface">
       <div className="mx-auto max-w-[110rem] px-6 py-20 md:px-10 md:py-28">
-        <div className="grid gap-14 md:grid-cols-4 md:gap-10">
+        <div className="grid gap-14 md:grid-cols-5 md:gap-10">
           <div className="md:col-span-1">
             <Wordmark className="text-3xl" />
             <p className="mt-6 max-w-xs text-sm leading-relaxed text-muted">{t.footer.tagline}</p>
+          </div>
+
+          <div>
+            <p className="eyebrow">{t.nav.menu}</p>
+            <ul className="mt-5 space-y-2.5 text-sm">
+              {sections.map((section) => (
+                <li key={section.id}>
+                  <Link
+                    href={`/menu#${section.id}`}
+                    className="text-fg transition-colors duration-300 hover:text-accent"
+                  >
+                    {section.title[lang]}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
 
           <div>
