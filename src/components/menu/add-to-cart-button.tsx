@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useLanguage } from "@/i18n/language-provider";
 import { useCart } from "@/lib/cart/cart-provider";
 import type { Product } from "@/lib/catalog/types";
@@ -13,14 +12,16 @@ type Props = {
 
 export function AddToCartButton({ product, compact = false, className = "" }: Props) {
   const { t } = useLanguage();
-  const { add } = useCart();
-  const [added, setAdded] = useState(false);
+  const { items, add } = useCart();
+  const productId = `${product.kind}-${product.id}`;
+  const inCart = items.some((row) => row.productId === productId);
 
   const onClick = (event: React.MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
+    if (inCart) return;
     add({
-      productId: `${product.kind}-${product.id}`,
+      productId,
       kind: product.kind,
       id: product.id,
       name: product.name,
@@ -28,8 +29,6 @@ export function AddToCartButton({ product, compact = false, className = "" }: Pr
       price: product.price,
       meta: [product.origin, product.glass].filter(Boolean).join(" · ") || undefined,
     });
-    setAdded(true);
-    window.setTimeout(() => setAdded(false), 1500);
   };
 
   if (compact) {
@@ -37,8 +36,11 @@ export function AddToCartButton({ product, compact = false, className = "" }: Pr
       <button
         type="button"
         onClick={onClick}
-        aria-label={t.cart.add}
-        className={`flex items-center gap-1.5 text-[0.6875rem] uppercase tracking-[0.2em] text-accent transition-colors duration-300 hover:text-fg ${className}`}
+        disabled={inCart}
+        aria-label={inCart ? t.cart.added : t.cart.add}
+        className={`flex items-center gap-1.5 text-[0.6875rem] uppercase tracking-[0.2em] transition-colors duration-300 ${
+          inCart ? "cursor-default text-muted" : "text-accent hover:text-fg"
+        } ${className}`}
       >
         <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.75">
           <path
@@ -49,7 +51,7 @@ export function AddToCartButton({ product, compact = false, className = "" }: Pr
           <circle cx="9" cy="20.5" r="1.25" />
           <circle cx="17" cy="20.5" r="1.25" />
         </svg>
-        {added ? t.cart.added : t.cart.add}
+        {inCart ? t.cart.added : t.cart.add}
       </button>
     );
   }
@@ -58,9 +60,12 @@ export function AddToCartButton({ product, compact = false, className = "" }: Pr
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-full border border-border px-6 py-3.5 text-[0.6875rem] uppercase tracking-[0.18em] transition-colors duration-400 ease-soft hover:border-accent hover:text-accent ${className}`}
+      disabled={inCart}
+      className={`rounded-full border px-6 py-3.5 text-[0.6875rem] uppercase tracking-[0.18em] transition-colors duration-400 ease-soft ${
+        inCart ? "cursor-default border-border text-muted" : "border-border hover:border-accent hover:text-accent"
+      } ${className}`}
     >
-      {added ? t.cart.added : t.cart.add}
+      {inCart ? t.cart.added : t.cart.add}
     </button>
   );
 }

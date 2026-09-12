@@ -1,12 +1,12 @@
 "use client";
 
-import { Canvas, useFrame, useLoader, useThree } from "@react-three/fiber";
-import { Suspense, useMemo, useRef, type RefObject } from "react";
+import { Canvas, useFrame, useLoader, useThree, type RootState } from "@react-three/fiber";
+import { Suspense, useLayoutEffect, useMemo, useRef, type RefObject } from "react";
 import * as THREE from "three";
 
 // Same-origin proxy Next.js's own <Image> already uses — guarantees no CORS issues loading
 // these textures from TheMealDB/TheCocktailDB's CDN, unlike fetching the raw remote URL.
-function proxiedImageUrl(src: string, width = 384) {
+function proxiedImageUrl(src: string, width: number) {
   return `/_next/image?url=${encodeURIComponent(src)}&w=${width}&q=75`;
 }
 
@@ -73,6 +73,19 @@ function FoodPlane({ url, rx, ry, z, rotationSpeed, floatSpeed, floatOffset, sca
   const texture = useLoader(THREE.TextureLoader, url);
   const group = useRef<THREE.Group>(null);
 
+  // No mipmaps: these are flat, roughly-constant-size quads, so the visual gain is marginal —
+  // skipping the mip chain meaningfully cuts per-texture GPU memory, which matters with up to
+  // ~48 textures live at once on weaker mobile GPUs (a real cause of dropped/black WebGL contexts).
+  useLayoutEffect(() => {
+    // Mutating a loaded texture's sampling settings is the standard three.js/R3F pattern (not a
+    // React value) — safe here since each plane's URL (and thus cache entry) is unique.
+    /* eslint-disable react-hooks/immutability */
+    texture.generateMipmaps = false;
+    texture.minFilter = THREE.LinearFilter;
+    texture.magFilter = THREE.LinearFilter;
+    texture.needsUpdate = true;
+    /* eslint-enable react-hooks/immutability */
+  }, [texture]);
   const photoUniforms = useMemo(() => ({ uMap: { value: texture }, uRadius: { value: 0.16 } }), [texture]);
   const shadowUniforms = useMemo(() => ({ uRadius: { value: 0.16 } }), []);
 
@@ -112,13 +125,21 @@ function FoodPlane({ url, rx, ry, z, rotationSpeed, floatSpeed, floatOffset, sca
   );
 }
 
-function Field({ images, scrollRef }: { images: string[]; scrollRef: RefObject<number> }) {
+function Field({
+  images,
+  scrollRef,
+  textureWidth,
+}: {
+  images: string[];
+  scrollRef: RefObject<number>;
+  textureWidth: number;
+}) {
   const group = useRef<THREE.Group>(null);
 
   const items = useMemo<FoodPlaneConfig[]>(
     () =>
-      images.map((url, index) => ({
-        url,
+      images.map((src, index) => ({
+        url: proxiedImageUrl(src, textureWidth),
         rx: hash(index * 3.1 + 1) - 0.5,
         ry: hash(index * 5.7 + 2) - 0.5,
         z: -0.5 - hash(index * 7.3 + 3) * 3.5,
@@ -127,7 +148,7 @@ function Field({ images, scrollRef }: { images: string[]; scrollRef: RefObject<n
         floatOffset: hash(index * 6.6 + 6) * 10,
         scale: 0.5 + hash(index * 8.2 + 7) * 0.5,
       })),
-    [images],
+    [images, textureWidth],
   );
 
   useFrame((state) => {
@@ -141,14 +162,23 @@ function Field({ images, scrollRef }: { images: string[]; scrollRef: RefObject<n
   return (
     <group ref={group}>
       {items.map((item, index) => (
-        <FoodPlane key={index} {...item} />
+        // Each plane gets its OWN Suspense boundary. A single shared boundary around the whole
+        // field means one slow/re-fetching texture (a cold cache after navigating back to the
+        // homepage, a flaky mobile connection) suspends every plane at once — the entire
+        // background goes blank (just the dark clear color) until ALL of them finish loading.
+        // Per-plane boundaries mean a slow one just holds up itself; everything else already
+        // loaded keeps rendering, so the field never disappears wholesale.
+        <Suspense key={index} fallback={null}>
+          <FoodPlane {...item} />
+        </Suspense>
       ))}
     </group>
   );
 }
 
 function ResponsiveField({ images, scrollRef }: { images: string[]; scrollRef: RefObject<number> }) {
-  // Fewer, closer planes on narrow/portrait viewports keep it legible and light on mobile GPUs.
+  // Fewer, closer, lower-res planes on narrow/portrait viewports keep it legible and light on
+  // mobile GPUs (less overall texture memory pressure — see the mipmap note in FoodPlane).
   const { width, height } = useThree((state) => state.size);
   const isCompact = width > 0 && width < 768;
   const isPortrait = height > width;
@@ -163,25 +193,28 @@ function ResponsiveField({ images, scrollRef }: { images: string[]; scrollRef: R
   return (
     <>
       <fog attach="fog" args={["#100c0a", 2.5, isPortrait ? 6 : 8]} />
-      <Field images={visible} scrollRef={scrollRef} />
+      <Field images={visible} scrollRef={scrollRef} textureWidth={isCompact ? 256 : 384} />
     </>
   );
 }
 
-export function HeroScene({ images, scrollRef }: { images: string[]; scrollRef: RefObject<number> }) {
-  const textures = useMemo(() => images.map((src) => proxiedImageUrl(src)), [images]);
+type Props = {
+  images: string[];
+  scrollRef: RefObject<number>;
+  onCreated?: (state: RootState) => void;
+};
 
+export function HeroScene({ images, scrollRef, onCreated }: Props) {
   return (
     <div className="absolute inset-0">
       <Canvas
         dpr={[1, 1.75]}
         gl={{ antialias: true, alpha: false, powerPreference: "low-power" }}
         camera={{ position: [0, 0, 5], fov: 50 }}
+        onCreated={onCreated}
       >
         <color attach="background" args={["#100c0a"]} />
-        <Suspense fallback={null}>
-          <ResponsiveField images={textures} scrollRef={scrollRef} />
-        </Suspense>
+        <ResponsiveField images={images} scrollRef={scrollRef} />
       </Canvas>
     </div>
   );

@@ -39,10 +39,10 @@ export function CartView() {
         <>
           <ul className="mt-12 divide-y divide-border border-y border-border">
             {items.map((item) => (
-              <li key={item.productId} className="flex flex-wrap items-center gap-4 py-5">
+              <li key={item.productId} className="flex flex-col gap-4 py-5 sm:flex-row sm:items-center">
                 <Link
                   href={productHref(item.kind, item.id)}
-                  className="group flex min-w-0 flex-1 items-center gap-4"
+                  className="group flex min-w-0 items-center gap-4 sm:flex-1"
                 >
                   <div className="photo-frame relative h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-surface">
                     <Image
@@ -66,7 +66,7 @@ export function CartView() {
                   </div>
                 </Link>
 
-                <div className="ml-auto flex shrink-0 items-center gap-4">
+                <div className="flex shrink-0 items-center justify-between gap-4 sm:justify-end">
                   <div className="flex items-center rounded-full border border-border">
                     <button
                       type="button"
@@ -87,7 +87,7 @@ export function CartView() {
                     </button>
                   </div>
 
-                  <span className="w-28 shrink-0 text-right text-xs tabular-nums text-muted">
+                  <span className="shrink-0 text-right text-xs tabular-nums text-muted sm:w-28">
                     {formatDualPrice(item.qty * item.price, lang)}
                   </span>
 
