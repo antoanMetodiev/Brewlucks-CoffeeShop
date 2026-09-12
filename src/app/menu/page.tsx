@@ -5,7 +5,7 @@ import { getCatalog } from "@/lib/catalog/catalog";
 export const metadata: Metadata = {
   title: "Меню",
   description:
-    "Закуска, основни, паста, десерти, кафе и напитки. — The full Bistro & Jars menu, with photos.",
+    "Закуска, основни, паста, десерти, кафе и напитки. — The full Brewlucks menu, with photos.",
 };
 
 export default async function MenuPage() {

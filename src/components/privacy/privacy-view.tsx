@@ -16,7 +16,7 @@ export function PrivacyView() {
 
   return (
     <section className="mx-auto max-w-[110rem] px-6 pb-28 pt-32 md:px-10 md:pb-40">
-      <p className="eyebrow">Bistro &amp; Jars</p>
+      <p className="eyebrow">Brewlucks</p>
       <h1 className="mt-6 font-display text-headline font-normal">{t.nav.privacy}</h1>
       <p className="mt-6 max-w-xl text-sm leading-relaxed text-muted">{privacyIntro[lang]}</p>
 

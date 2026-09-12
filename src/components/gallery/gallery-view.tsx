@@ -126,7 +126,7 @@ export function GalleryView({ products }: { products: Product[] }) {
   return (
     <div ref={root}>
       <section className="mx-auto max-w-[110rem] px-6 pb-12 pt-32 md:px-10">
-        <p className="eyebrow">Bistro &amp; Jars</p>
+        <p className="eyebrow">Brewlucks</p>
         <h1 className="mt-6 font-display text-headline font-normal">{t.nav.gallery}</h1>
         <p className="mt-6 max-w-xl text-sm leading-relaxed text-muted">{t.gallery.intro}</p>
 

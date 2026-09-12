@@ -1,7 +1,7 @@
-# Bistro & Jars — Project Brief
+# Brewlucks — Project Brief
 
 ## Overview
-Website for **Bistro & Jars**, a coffee bar. Premium, story-led presentation site (not a generic template) — photo/video heavy, bilingual (Bulgarian/English), dark editorial feel, tasteful animation throughout.
+Website for **Brewlucks**, a coffee bar. Premium, story-led presentation site (not a generic template) — photo/video heavy, bilingual (Bulgarian/English), dark editorial feel, tasteful animation throughout.
 
 Instead of a standard contact form, inquiries and reservation requests are sent directly to **WhatsApp** (via the WhatsApp Cloud API).
 

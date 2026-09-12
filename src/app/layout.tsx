@@ -20,10 +20,10 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: "Bistro & Jars",
-    template: "%s — Bistro & Jars",
+    default: "Brewlucks",
+    template: "%s — Brewlucks",
   },
-  description: "Kafa, hrana i sporo jutro u srcu grada. — Coffee, food and slow mornings in the heart of the city.",
+  description: "Кафе, храна и бавни сутрини в сърцето на София. — Coffee, food and slow mornings in the heart of the city.",
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {

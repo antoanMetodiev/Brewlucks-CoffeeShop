@@ -18,8 +18,8 @@ export const privacySections: PrivacySection[] = [
     title: { bg: "Кои сме ние", en: "Who we are" },
     body: [
       {
-        bg: "Този сайт се поддържа от Bistro & Jars (\"ние\", \"нас\"). За всякакви въпроси относно вашите данни можете да се свържете с нас по начина, посочен в края на тази страница.",
-        en: "This website is operated by Bistro & Jars (\"we\", \"us\"). For any questions about your data, you can reach us using the contact details at the end of this page.",
+        bg: "Този сайт се поддържа от Brewlucks (\"ние\", \"нас\"). За всякакви въпроси относно вашите данни можете да се свържете с нас по начина, посочен в края на тази страница.",
+        en: "This website is operated by Brewlucks (\"we\", \"us\"). For any questions about your data, you can reach us using the contact details at the end of this page.",
       },
     ],
   },

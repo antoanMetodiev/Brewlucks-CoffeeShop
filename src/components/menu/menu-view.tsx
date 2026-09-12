@@ -160,7 +160,7 @@ export function MenuView({ catalog }: { catalog: Catalog }) {
       <section className="mx-auto max-w-[110rem] px-6 pb-12 pt-32 md:px-10 md:pb-16">
         <div className="grid gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,22rem)] md:items-end">
           <div>
-            <p className="eyebrow">Bistro &amp; Jars</p>
+            <p className="eyebrow">Brewlucks</p>
             <h1 className="mt-6 font-display text-display font-normal">{t.nav.menu}</h1>
             <p className="mt-6 max-w-xl text-sm leading-relaxed text-muted">{t.menu.intro}</p>
           </div>

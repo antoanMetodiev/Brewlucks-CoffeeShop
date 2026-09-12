@@ -68,7 +68,7 @@ const bg = {
     formSubmit: "Изпрати в WhatsApp",
     formHint:
       "Бутонът отваря WhatsApp с попълнено съобщение — изпращате го от вашия телефон, без регистрация.",
-    messageGreeting: "Здравейте, пиша от сайта на Bistro & Jars.",
+    messageGreeting: "Здравейте, пиша от сайта на Brewlucks.",
   },
   privacy: {
     contents: "Съдържание",
@@ -196,7 +196,7 @@ const en: Dictionary = {
     formSubmit: "Send via WhatsApp",
     formHint:
       "The button opens WhatsApp with your message filled in — you send it from your own phone, no sign-up needed.",
-    messageGreeting: "Hi, I'm writing from the Bistro & Jars website.",
+    messageGreeting: "Hi, I'm writing from the Brewlucks website.",
   },
   privacy: {
     contents: "Contents",

@@ -1,3 +1,5 @@
+import { fetchJsonWithRetry } from "./http";
+
 const BASE = "https://www.thecocktaildb.com/api/json/v1/1";
 
 export type DrinkSummary = { idDrink: string; strDrink: string; strDrinkThumb: string };
@@ -10,10 +12,8 @@ export type DrinkRecord = DrinkSummary & {
   strTags: string | null;
 } & Record<`strIngredient${number}` | `strMeasure${number}`, string | null>;
 
-async function getJson<T>(path: string): Promise<T> {
-  const response = await fetch(`${BASE}/${path}`, { cache: "force-cache" });
-  if (!response.ok) throw new Error(`TheCocktailDB ${path} responded ${response.status}`);
-  return response.json() as Promise<T>;
+function getJson<T>(path: string): Promise<T> {
+  return fetchJsonWithRetry<T>(`${BASE}/${path}`);
 }
 
 export async function listDrinks(category: string): Promise<DrinkSummary[]> {

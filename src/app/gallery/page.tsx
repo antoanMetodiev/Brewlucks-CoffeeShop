@@ -4,7 +4,7 @@ import { getCatalog } from "@/lib/catalog/catalog";
 
 export const metadata: Metadata = {
   title: "Галерия",
-  description: "Чиниите, чашите и ъглите, които най-често помните. — A look inside Bistro & Jars.",
+  description: "Чиниите, чашите и ъглите, които най-често помните. — A look inside Brewlucks.",
 };
 
 const PER_SECTION = 2;

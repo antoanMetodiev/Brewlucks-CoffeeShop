@@ -1,6 +1,6 @@
 // Placeholder business details — replace with the client's real content when the asset folder arrives.
 export const site = {
-  name: "Bistro & Jars",
+  name: "Brewlucks",
   address: {
     street: "Ulitsa i nomer",
     city: "Sofia, Bulgaria",
@@ -12,10 +12,10 @@ export const site = {
   whatsappNumber: "359880000000",
   // Placeholder — replace with the venue's real registered legal name and contact email
   // once available; used on the privacy policy as the data controller's identity.
-  legalName: "Bistro & Jars EOOD",
-  privacyEmail: "privacy@bistroandjars.bg",
+  legalName: "Brewlucks EOOD",
+  privacyEmail: "privacy@brewlucks.bg",
   instagram: {
-    handle: "@bistroandjars",
+    handle: "@brewlucks",
     url: "https://instagram.com",
   },
 };
