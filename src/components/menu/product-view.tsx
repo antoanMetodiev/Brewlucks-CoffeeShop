@@ -189,7 +189,7 @@ export function ProductView({ product, sectionTitle, related }: Props) {
             </div>
             <div data-reveal className="mt-10 grid grid-cols-2 gap-x-4 gap-y-10 md:gap-x-6 lg:grid-cols-4">
               {related.map((item) => (
-                <ProductCard key={item.id} product={item} sizes="(min-width: 1024px) 22vw, 45vw" />
+                <ProductCard key={`${item.kind}-${item.id}`} product={item} sizes="(min-width: 1024px) 22vw, 45vw" />
               ))}
             </div>
           </div>

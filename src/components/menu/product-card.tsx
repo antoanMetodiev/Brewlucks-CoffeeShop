@@ -62,7 +62,7 @@ export function ProductCard({
             <ul className="flex flex-wrap gap-1.5">
               {chips.map((ingredient, index) => (
                 <li
-                  key={ingredient}
+                  key={`${ingredient}-${index}`}
                   style={{ transitionDelay: `${60 + index * 40}ms` }}
                   className="translate-y-2 rounded-full border border-fg/15 bg-bg/60 px-2.5 py-1 text-[0.6875rem] text-fg opacity-0 transition-all duration-500 ease-editorial group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100"
                 >

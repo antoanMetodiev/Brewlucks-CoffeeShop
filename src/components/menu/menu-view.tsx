@@ -5,6 +5,7 @@ import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { useLanguage } from "@/i18n/language-provider";
 import type { Catalog, Product, ProductKind } from "@/lib/catalog/types";
 import { ProductCard } from "./product-card";
+import { ProductCarousel } from "./product-carousel";
 
 type KindFilter = "all" | ProductKind;
 type Sort = "category" | "price-asc" | "price-desc" | "name";
@@ -36,6 +37,11 @@ export function MenuView({ catalog }: { catalog: Catalog }) {
 
   const signature = useMemo(
     () => catalog.flatMap((section) => section.products.filter((product) => product.signature)),
+    [catalog],
+  );
+
+  const sectionTitles = useMemo(
+    () => new Map(catalog.map((section) => [section.id, section.title])),
     [catalog],
   );
 
@@ -172,24 +178,16 @@ export function MenuView({ catalog }: { catalog: Catalog }) {
       </section>
 
       {isDefaultView && (
-        <section className="border-y border-border bg-surface">
-          <div className="mx-auto max-w-[110rem] px-6 pt-16 md:px-10 md:pt-20">
-            <p className="eyebrow">{t.menu.picks}</p>
-            <div className="mt-4 flex flex-wrap items-end justify-between gap-6">
-              <h2 className="font-display text-headline font-normal">{t.menu.signature}</h2>
-              <p className="max-w-sm text-sm leading-relaxed text-muted">{t.menu.picksBody}</p>
-            </div>
-          </div>
-          <div className="mx-auto max-w-[110rem] pb-16 pt-10 md:pb-20">
-            <div className="flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-4 md:gap-6 md:px-10 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              {signature.map((product) => (
-                <div key={product.id} className="w-[62vw] shrink-0 snap-start sm:w-[36vw] md:w-[24vw] lg:w-[17vw]">
-                  <ProductCard product={product} sizes="(min-width: 1024px) 17vw, (min-width: 768px) 24vw, 62vw" />
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        <ProductCarousel
+          products={signature}
+          header={
+            <>
+              <p className="eyebrow">{t.menu.picks}</p>
+              <h2 className="mt-4 font-display text-headline font-normal">{t.menu.signature}</h2>
+              <p className="mt-4 max-w-md text-sm leading-relaxed text-muted">{t.menu.picksBody}</p>
+            </>
+          }
+        />
       )}
 
       <div ref={toolbar} className="sticky top-20 z-30 border-b border-border bg-bg/90 backdrop-blur-xl">
@@ -365,7 +363,11 @@ export function MenuView({ catalog }: { catalog: Catalog }) {
                 </div>
                 <div className={`mt-10 ${cardGrid} xl:grid-cols-5`}>
                   {flat.map((product) => (
-                    <ProductCard key={`${product.kind}-${product.id}`} product={product} />
+                    <ProductCard
+                      key={`${product.kind}-${product.id}`}
+                      product={product}
+                      sectionTitle={sectionTitles.get(product.sectionId)}
+                    />
                   ))}
                 </div>
               </section>

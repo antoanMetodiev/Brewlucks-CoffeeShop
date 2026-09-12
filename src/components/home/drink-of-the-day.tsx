@@ -36,9 +36,9 @@ export function DrinkOfTheDay({ drink }: { drink: ProductDetail }) {
           <div data-reveal className="mt-12">
             <p className="eyebrow">{t.home.drinkIngredients}</p>
             <ul className="mt-5 flex flex-wrap gap-2">
-              {drink.ingredients.map((ingredient) => (
+              {drink.ingredients.map((ingredient, index) => (
                 <li
-                  key={ingredient.name}
+                  key={`${ingredient.name}-${index}`}
                   className="rounded-full border border-border px-4 py-2 text-sm text-fg"
                 >
                   {ingredient.name}
