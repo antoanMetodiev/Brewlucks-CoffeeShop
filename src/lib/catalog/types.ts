@@ -11,13 +11,14 @@ export type Product = {
   price: number;
   signature: boolean;
   origin?: string;
+  glass?: string;
+  tags: string[];
+  ingredients: string[];
 };
 
 export type Ingredient = { name: string; measure: string };
 
-export type ProductDetail = Product & {
-  tags: string[];
-  glass?: string;
+export type ProductDetail = Omit<Product, "ingredients"> & {
   ingredients: Ingredient[];
   steps: string[];
 };

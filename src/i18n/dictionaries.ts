@@ -99,6 +99,9 @@ const bg = {
     picks: "Специалитетите на дома",
     picksBody: "Най-търсеното от кухнята и бара — започнете оттук.",
     backToTop: "Най-горе",
+    ingredientsLabel: "съставки",
+    details: "Детайли",
+    slide: "Слайд",
   },
   product: {
     back: "Обратно към менюто",
@@ -224,6 +227,9 @@ const en: Dictionary = {
     picks: "House specialties",
     picksBody: "The most-loved from the kitchen and the bar — start here.",
     backToTop: "Back to top",
+    ingredientsLabel: "ingredients",
+    details: "Details",
+    slide: "Slide",
   },
   product: {
     back: "Back to the menu",

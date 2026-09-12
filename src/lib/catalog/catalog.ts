@@ -6,6 +6,7 @@ import type { Catalog, Ingredient, Product, ProductDetail, ProductKind, Section 
 
 const SIGNATURE_PER_SECTION = 2;
 const DRINK_OF_THE_DAY_ID = "12770";
+const LOOKUP_CONCURRENCY = 8;
 
 function hash(input: string) {
   let value = 0;
@@ -37,19 +38,85 @@ function interleave<T>(lists: T[][]) {
   return result;
 }
 
-type Summary = { id: string; name: string; image: string; origin?: string };
+async function mapLimit<T, R>(items: T[], limit: number, worker: (item: T) => Promise<R>) {
+  const results: R[] = new Array(items.length);
+  let next = 0;
+  await Promise.all(
+    Array.from({ length: Math.min(limit, items.length) }, async () => {
+      while (next < items.length) {
+        const index = next++;
+        results[index] = await worker(items[index]);
+      }
+    }),
+  );
+  return results;
+}
 
-function toProducts(config: SectionConfig, summaries: Summary[]): Product[] {
-  return spread(summaries, config.limit).map((summary, index) => ({
-    id: summary.id,
-    kind: config.kind,
-    name: summary.name,
-    image: summary.image,
-    sectionId: config.id,
-    price: priceFor(config, summary.id),
-    signature: index < SIGNATURE_PER_SECTION,
-    ...(summary.origin ? { origin: summary.origin } : {}),
-  }));
+type Summary = { id: string; name: string; image: string; origin?: string };
+type Record_ = MealRecord | DrinkRecord;
+
+function readIngredients(record: Record_): Ingredient[] {
+  const ingredients: Ingredient[] = [];
+  for (let index = 1; index <= 20; index++) {
+    const name = record[`strIngredient${index}`]?.trim();
+    if (!name) continue;
+    ingredients.push({ name, measure: record[`strMeasure${index}`]?.trim() ?? "" });
+  }
+  return ingredients;
+}
+
+function readSteps(instructions: string | null) {
+  const lines = (instructions ?? "")
+    .split(/\r?\n+/)
+    .map((line) => line.replace(/^\s*(step\s*\d+[:.)]?)\s*/i, "").trim())
+    .filter(Boolean);
+  if (lines.length > 1) return lines;
+  return (lines[0] ?? "")
+    .split(/(?<=[.!?])\s+(?=[A-Z])/)
+    .map((sentence) => sentence.trim())
+    .filter(Boolean);
+}
+
+function readTags(tags: string | null) {
+  return (tags ?? "")
+    .split(",")
+    .map((tag) => tag.trim())
+    .filter(Boolean);
+}
+
+async function lookup(kind: ProductKind, id: string): Promise<Record_ | null> {
+  return kind === "meal" ? lookupMeal(id) : lookupDrink(id);
+}
+
+function recordOrigin(record: Record_) {
+  return "strArea" in record ? (record.strArea ?? undefined) : undefined;
+}
+
+function recordGlass(record: Record_) {
+  return "strGlass" in record ? (record.strGlass ?? undefined) : undefined;
+}
+
+async function toProducts(config: SectionConfig, summaries: Summary[]): Promise<Product[]> {
+  const picked = spread(summaries, config.limit);
+  return mapLimit(picked, LOOKUP_CONCURRENCY, async (summary) => {
+    const record = await lookup(config.kind, summary.id);
+    const index = picked.indexOf(summary);
+    const origin = summary.origin ?? (record ? recordOrigin(record) : undefined);
+    const glass = record ? recordGlass(record) : undefined;
+    return {
+      id: summary.id,
+      kind: config.kind,
+      name: summary.name,
+      image: summary.image,
+      sectionId: config.id,
+      price: priceFor(config, summary.id),
+      signature: index < SIGNATURE_PER_SECTION,
+      ...(origin ? { origin } : {}),
+      ...(glass ? { glass } : {}),
+      tags: record ? readTags(record.strTags) : [],
+      ingredients: record ? readIngredients(record).map((ingredient) => ingredient.name) : [],
+    };
+  });
 }
 
 async function mealSummaries(categories: string[]): Promise<Summary[]> {
@@ -84,7 +151,7 @@ export const getCatalog = cache(async (): Promise<Catalog> => {
         .map((drink) => ({ id: drink.idDrink, name: drink.strDrink, image: drink.strDrinkThumb }));
     }
 
-    const products = toProducts(config, summaries);
+    const products = await toProducts(config, summaries);
     if (config.kind === "drink") products.forEach((product) => usedDrinks.add(product.id));
 
     sections.push({
@@ -104,35 +171,6 @@ export async function getFeatured(count = 8): Promise<Product[]> {
   return catalog.slice(0, count).map((section) => section.products[0]);
 }
 
-function readIngredients(record: MealRecord | DrinkRecord): Ingredient[] {
-  const ingredients: Ingredient[] = [];
-  for (let index = 1; index <= 20; index++) {
-    const name = record[`strIngredient${index}`]?.trim();
-    if (!name) continue;
-    ingredients.push({ name, measure: record[`strMeasure${index}`]?.trim() ?? "" });
-  }
-  return ingredients;
-}
-
-function readSteps(instructions: string | null) {
-  const lines = (instructions ?? "")
-    .split(/\r?\n+/)
-    .map((line) => line.replace(/^\s*(step\s*\d+[:.)]?)\s*/i, "").trim())
-    .filter(Boolean);
-  if (lines.length > 1) return lines;
-  return (lines[0] ?? "")
-    .split(/(?<=[.!?])\s+(?=[A-Z])/)
-    .map((sentence) => sentence.trim())
-    .filter(Boolean);
-}
-
-function readTags(tags: string | null) {
-  return (tags ?? "")
-    .split(",")
-    .map((tag) => tag.trim())
-    .filter(Boolean);
-}
-
 export async function getProduct(kind: ProductKind, id: string): Promise<ProductDetail | null> {
   const catalog = await getCatalog();
   const product = catalog
@@ -140,24 +178,11 @@ export async function getProduct(kind: ProductKind, id: string): Promise<Product
     .find((candidate) => candidate.kind === kind && candidate.id === id);
   if (!product) return null;
 
-  if (kind === "meal") {
-    const record = await lookupMeal(id);
-    if (!record) return null;
-    return {
-      ...product,
-      origin: product.origin ?? record.strArea ?? undefined,
-      tags: readTags(record.strTags),
-      ingredients: readIngredients(record),
-      steps: readSteps(record.strInstructions),
-    };
-  }
-
-  const record = await lookupDrink(id);
+  const record = await lookup(kind, id);
   if (!record) return null;
+
   return {
     ...product,
-    tags: readTags(record.strTags),
-    glass: record.strGlass ?? undefined,
     ingredients: readIngredients(record),
     steps: readSteps(record.strInstructions),
   };
