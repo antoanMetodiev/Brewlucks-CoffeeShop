@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { useLanguage } from "@/i18n/language-provider";
+import { imageVariant } from "@/lib/catalog/format";
 import type { Product } from "@/lib/catalog/types";
 import { Atmosphere } from "./atmosphere";
 import { FeaturedStrip } from "./featured-strip";
@@ -13,10 +14,11 @@ import { SignatureScroll } from "./signature-scroll";
 
 type Props = {
   featured: Product[];
+  heroShowcase: Product[];
   signatureDrinks: Product[];
 };
 
-export function HomeView({ featured, signatureDrinks }: Props) {
+export function HomeView({ featured, heroShowcase, signatureDrinks }: Props) {
   const root = useRef<HTMLDivElement>(null);
   const { t, lang } = useLanguage();
 
@@ -46,9 +48,11 @@ export function HomeView({ featured, signatureDrinks }: Props) {
     { scope: root, dependencies: [lang], revertOnUpdate: true },
   );
 
+  const heroImages = heroShowcase.map((product) => imageVariant(product.image, "small"));
+
   return (
     <div ref={root}>
-      <Hero />
+      <Hero images={heroImages} />
 
       <section className="mx-auto max-w-[110rem] px-6 py-28 md:px-10 md:py-40">
         <div data-reveal className="grid gap-10 md:grid-cols-[minmax(0,20rem)_minmax(0,36rem)] md:gap-24">

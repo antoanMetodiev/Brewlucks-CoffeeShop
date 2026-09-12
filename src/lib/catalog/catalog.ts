@@ -88,6 +88,16 @@ export async function getProduct(kind: ProductKind, id: string): Promise<Product
   };
 }
 
+// A wide, evenly-spread selection across the whole catalog (not just one-per-section) — used to
+// densely fill the home page's WebGL hero background with real menu photos.
+export async function getHeroShowcase(count = 48): Promise<Product[]> {
+  const catalog = await getCatalog();
+  const all = catalog.flatMap((section) => section.products);
+  if (all.length <= count) return all;
+  const step = all.length / count;
+  return Array.from({ length: count }, (_, index) => all[Math.floor(index * step)]);
+}
+
 // The signature drinks across all drink sections (coffee, shakes, lemonades) — used by the
 // home page's pinned horizontal-scroll showcase.
 export async function getSignatureDrinks(): Promise<Product[]> {
