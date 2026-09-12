@@ -207,13 +207,15 @@ type Props = {
 export function HeroScene({ images, scrollRef, onCreated }: Props) {
   return (
     <div className="absolute inset-0">
+      {/* Transparent canvas (no opaque clear color) — the warm CSS gradient behind it (see
+          HeroBackground) shows through everywhere a photo hasn't rendered yet, so there's never a
+          stretch of flat black while textures are still loading, only ever-filling-in photos. */}
       <Canvas
         dpr={[1, 1.75]}
-        gl={{ antialias: true, alpha: false, powerPreference: "low-power" }}
+        gl={{ antialias: true, alpha: true, powerPreference: "low-power" }}
         camera={{ position: [0, 0, 5], fov: 50 }}
         onCreated={onCreated}
       >
-        <color attach="background" args={["#100c0a"]} />
         <ResponsiveField images={images} scrollRef={scrollRef} />
       </Canvas>
     </div>

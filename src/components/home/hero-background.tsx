@@ -44,7 +44,6 @@ const GIVE_UP_AFTER_MS = 6000;
 // few seconds and show the plain gradient instead of staying stuck on black.
 export function HeroBackground({ images, scrollRef }: Props) {
   const [sceneKey, setSceneKey] = useState(0);
-  const [lost, setLost] = useState(false);
   const [gaveUp, setGaveUp] = useState(false);
   const giveUpTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -53,7 +52,6 @@ export function HeroBackground({ images, scrollRef }: Props) {
 
     const onLost = (event: Event) => {
       event.preventDefault();
-      setLost(true);
       giveUpTimer.current = setTimeout(() => setGaveUp(true), GIVE_UP_AFTER_MS);
     };
 
@@ -62,7 +60,6 @@ export function HeroBackground({ images, scrollRef }: Props) {
         clearTimeout(giveUpTimer.current);
         giveUpTimer.current = null;
       }
-      setLost(false);
       setSceneKey((key) => key + 1);
     };
 
@@ -70,12 +67,18 @@ export function HeroBackground({ images, scrollRef }: Props) {
     canvas.addEventListener("webglcontextrestored", onRestored, false);
   }, []);
 
-  if (gaveUp) return <FallbackBackground />;
-
   return (
-    <WebglBoundary key={sceneKey}>
-      {lost && <FallbackBackground />}
-      <HeroScene images={images} scrollRef={scrollRef} onCreated={handleCreated} />
-    </WebglBoundary>
+    <>
+      {/* Always mounted, underneath: the canvas itself is transparent (see hero-scene.tsx), so
+          this gradient is what's visible behind/before any photo has rendered — loading, a slow
+          connection, a lost context, or giving up on WebGL entirely all just show this instead of
+          a stretch of flat black. */}
+      <FallbackBackground />
+      {!gaveUp && (
+        <WebglBoundary key={sceneKey}>
+          <HeroScene images={images} scrollRef={scrollRef} onCreated={handleCreated} />
+        </WebglBoundary>
+      )}
+    </>
   );
 }
