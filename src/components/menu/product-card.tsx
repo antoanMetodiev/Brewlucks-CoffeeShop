@@ -6,6 +6,7 @@ import { useLanguage } from "@/i18n/language-provider";
 import type { Localized } from "@/i18n/dictionaries";
 import { currency, formatPrice, imageVariant, productHref } from "@/lib/catalog/format";
 import type { Product } from "@/lib/catalog/types";
+import { AddToCartButton } from "./add-to-cart-button";
 import { FavoriteButton } from "./favorite-button";
 
 type Props = {
@@ -83,10 +84,13 @@ export function ProductCard({
               )}
             </ul>
           )}
-          <p className="mt-3 flex items-center gap-2 text-[0.6875rem] uppercase tracking-[0.2em] text-accent">
-            {t.menu.details}
-            <span className="inline-block transition-transform duration-500 ease-editorial group-hover:translate-x-1">→</span>
-          </p>
+          <div className="mt-3 flex items-center justify-between gap-2">
+            <p className="flex items-center gap-2 text-[0.6875rem] uppercase tracking-[0.2em] text-accent">
+              {t.menu.details}
+              <span className="inline-block transition-transform duration-500 ease-editorial group-hover:translate-x-1">→</span>
+            </p>
+            <AddToCartButton product={product} compact />
+          </div>
         </div>
       </div>
 

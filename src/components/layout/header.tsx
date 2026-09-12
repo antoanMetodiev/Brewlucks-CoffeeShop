@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/i18n/language-provider";
 import { getNavLinks, isActivePath } from "@/lib/navigation";
+import { useCart } from "@/lib/cart/cart-provider";
 import { useSession } from "@/lib/supabase/use-session";
 import { LanguageToggle } from "./language-toggle";
 import { Wordmark } from "./wordmark";
@@ -13,11 +14,13 @@ export function Header() {
   const { t } = useLanguage();
   const pathname = usePathname();
   const { user } = useSession();
+  const { count } = useCart();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const links = getNavLinks(t);
   const accountHref = user ? "/account" : "/login";
   const accountLabel = user ? t.auth.myAccount : t.auth.signIn;
+  const avatarUrl = user?.user_metadata?.avatar_url as string | undefined;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -77,11 +80,34 @@ export function Header() {
         <div className="flex items-center gap-6">
           <LanguageToggle />
           <Link
+            href="/cart"
+            aria-label={t.cart.title}
+            className="relative flex h-8 w-8 items-center justify-center rounded-full border border-border text-fg transition-colors duration-300 hover:border-accent hover:text-accent"
+          >
+            <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3 4h2l1.5 11.5A2 2 0 0 0 8.5 17.5h9a2 2 0 0 0 2-1.7L21 8H6"
+              />
+              <circle cx="9" cy="20.5" r="1.25" />
+              <circle cx="17" cy="20.5" r="1.25" />
+            </svg>
+            {count > 0 && (
+              <span className="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-accent text-[0.5625rem] text-bg tabular-nums">
+                {count}
+              </span>
+            )}
+          </Link>
+          <Link
             href={accountHref}
             aria-label={accountLabel}
-            className="flex h-8 w-8 items-center justify-center rounded-full border border-border text-[0.6875rem] uppercase text-fg transition-colors duration-300 hover:border-accent hover:text-accent"
+            className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-border text-[0.6875rem] uppercase text-fg transition-colors duration-300 hover:border-accent hover:text-accent"
           >
-            {user ? (
+            {avatarUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={avatarUrl} alt="" className="h-full w-full object-cover" />
+            ) : user ? (
               (user.email?.[0] ?? "?").toUpperCase()
             ) : (
               <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -145,6 +171,17 @@ export function Header() {
             } ${isActivePath(pathname, accountHref) ? "text-accent" : "text-fg"}`}
           >
             {accountLabel}
+          </Link>
+          <Link
+            href="/cart"
+            onClick={() => setMenuOpen(false)}
+            style={{ transitionDelay: menuOpen ? `${120 + (links.length + 1) * 70}ms` : "0ms" }}
+            className={`font-display text-4xl transition-all duration-500 ease-editorial ${
+              menuOpen ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+            } ${isActivePath(pathname, "/cart") ? "text-accent" : "text-fg"}`}
+          >
+            {t.cart.title}
+            {count > 0 && <span className="ml-3 text-lg text-muted tabular-nums">({count})</span>}
           </Link>
         </nav>
       </div>

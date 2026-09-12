@@ -9,6 +9,7 @@ import type { Localized } from "@/i18n/dictionaries";
 import { currency, formatPrice } from "@/lib/catalog/format";
 import type { Product, ProductDetail } from "@/lib/catalog/types";
 import { whatsappMessageUrl } from "@/lib/site";
+import { AddToCartButton } from "./add-to-cart-button";
 import { FavoriteButton } from "./favorite-button";
 import { ProductCard } from "./product-card";
 
@@ -138,6 +139,7 @@ export function ProductView({ product, sectionTitle, related }: Props) {
               >
                 {t.actions.reserve}
               </Link>
+              <AddToCartButton product={product} />
               <FavoriteButton productId={`${product.kind}-${product.id}`} className="border border-border" />
             </div>
 

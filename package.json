@@ -14,7 +14,8 @@
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
     "db:sync": "tsx scripts/fetch-catalog.ts",
     "db:seed": "tsx scripts/seed-supabase.ts",
-    "db:setup-auth": "tsx scripts/setup-auth-schema.ts"
+    "db:setup-auth": "tsx scripts/setup-auth-schema.ts",
+    "db:setup-profile": "tsx scripts/setup-profile-storage.ts"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
