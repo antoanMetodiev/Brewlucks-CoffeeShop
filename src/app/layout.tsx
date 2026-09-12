@@ -4,6 +4,7 @@ import "./globals.css";
 import { LanguageProvider } from "@/i18n/language-provider";
 import { CartProvider } from "@/lib/cart/cart-provider";
 import { FavoritesProvider } from "@/lib/supabase/favorites-provider";
+import { ProfileProvider } from "@/lib/supabase/profile-provider";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { getCatalog } from "@/lib/catalog/catalog";
@@ -39,13 +40,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="bg" suppressHydrationWarning>
       <body className={`${fraunces.variable} ${dmSans.variable} antialiased`}>
         <LanguageProvider>
-          <FavoritesProvider>
-            <CartProvider>
-              <Header />
-              <main className="min-h-dvh">{children}</main>
-              <Footer sections={footerSections} />
-            </CartProvider>
-          </FavoritesProvider>
+          <ProfileProvider>
+            <FavoritesProvider>
+              <CartProvider>
+                <Header />
+                <main className="min-h-dvh">{children}</main>
+                <Footer sections={footerSections} />
+              </CartProvider>
+            </FavoritesProvider>
+          </ProfileProvider>
         </LanguageProvider>
       </body>
     </html>

@@ -12,27 +12,30 @@ type FavoritesContextValue = {
   signedIn: boolean;
 };
 
-const EMPTY_IDS: Set<string> = new Set();
+const EMPTY_LIST: string[] = [];
 
 const FavoritesContext = createContext<FavoritesContextValue | null>(null);
 
+// Favorites live on public.users.favorites (jsonb array of "kind-id" strings) — a profile field,
+// not a separate table, so it reuses the users table's own "select/update own" RLS policies.
 export function FavoritesProvider({ children }: { children: ReactNode }) {
   const { user, loading: sessionLoading } = useSession();
-  const [fetchedIds, setFetchedIds] = useState<Set<string>>(EMPTY_IDS);
-  const [fetchedFor, setFetchedFor] = useState<string | null>(null);
+  const [favorites, setFavorites] = useState<string[]>(EMPTY_LIST);
+  const [loadedFor, setLoadedFor] = useState<string | null>(null);
 
   useEffect(() => {
     if (sessionLoading || !user) return;
 
     let active = true;
     supabase
-      .from("favorites")
-      .select("product_id")
-      .eq("user_id", user.id)
+      .from("users")
+      .select("favorites")
+      .eq("id", user.id)
+      .single()
       .then(({ data }) => {
         if (!active) return;
-        setFetchedIds(new Set((data ?? []).map((row) => row.product_id as string)));
-        setFetchedFor(user.id);
+        setFavorites((data?.favorites as string[] | null) ?? []);
+        setLoadedFor(user.id);
       });
 
     return () => {
@@ -40,30 +43,30 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
     };
   }, [user, sessionLoading]);
 
-  const ids = user && fetchedFor === user.id ? fetchedIds : EMPTY_IDS;
-  const loading = sessionLoading || (Boolean(user) && fetchedFor !== user?.id);
+  const ids = useMemo(
+    () => new Set(user && loadedFor === user.id ? favorites : EMPTY_LIST),
+    [user, loadedFor, favorites],
+  );
+  const loading = sessionLoading || (Boolean(user) && loadedFor !== user?.id);
 
   const toggle = useCallback(
     async (productId: string) => {
       if (!user) return;
 
       const wasFavorite = ids.has(productId);
-      const next = new Set(ids);
-      if (wasFavorite) next.delete(productId);
-      else next.add(productId);
-      setFetchedIds(next);
-      setFetchedFor(user.id);
+      const next = wasFavorite
+        ? favorites.filter((id) => id !== productId)
+        : [...favorites, productId];
+      setFavorites(next);
+      setLoadedFor(user.id);
 
-      const { error } = wasFavorite
-        ? await supabase.from("favorites").delete().eq("user_id", user.id).eq("product_id", productId)
-        : await supabase.from("favorites").insert({ user_id: user.id, product_id: productId });
-
+      const { error } = await supabase.from("users").update({ favorites: next }).eq("id", user.id);
       if (error) {
-        setFetchedIds(ids); // revert on failure
-        setFetchedFor(user.id);
+        setFavorites(favorites); // revert on failure
+        setLoadedFor(user.id);
       }
     },
-    [ids, user],
+    [ids, favorites, user],
   );
 
   const isFavorite = useCallback((productId: string) => ids.has(productId), [ids]);

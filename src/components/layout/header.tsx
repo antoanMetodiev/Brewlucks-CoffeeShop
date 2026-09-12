@@ -7,6 +7,7 @@ import { useLanguage } from "@/i18n/language-provider";
 import { getNavLinks, isActivePath } from "@/lib/navigation";
 import { useCart } from "@/lib/cart/cart-provider";
 import { useFavorites } from "@/lib/supabase/favorites-provider";
+import { useProfile } from "@/lib/supabase/profile-provider";
 import { useSession } from "@/lib/supabase/use-session";
 import { LanguageToggle } from "./language-toggle";
 import { Wordmark } from "./wordmark";
@@ -17,12 +18,13 @@ export function Header() {
   const { user } = useSession();
   const { count } = useCart();
   const { ids: favoriteIds } = useFavorites();
+  const { profile } = useProfile();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const links = getNavLinks(t);
   const accountHref = user ? "/account" : "/login";
   const accountLabel = user ? t.auth.myAccount : t.auth.signIn;
-  const avatarUrl = user?.user_metadata?.avatar_url as string | undefined;
+  const avatarUrl = profile?.avatar_url ?? undefined;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);

@@ -5,23 +5,17 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useLanguage } from "@/i18n/language-provider";
 import { FavoritesGrid } from "@/components/favorites/favorites-grid";
 import { supabase } from "@/lib/supabase/client";
+import { useProfile } from "@/lib/supabase/profile-provider";
 import { useSession } from "@/lib/supabase/use-session";
 import type { Product } from "@/lib/catalog/types";
-
-type ProfileRow = {
-  full_name: string | null;
-  phone: string | null;
-  address: string | null;
-  avatar_url: string | null;
-};
 
 export function AccountView({ products }: { products: Product[] }) {
   const { t } = useLanguage();
   const router = useRouter();
   const { user, loading: sessionLoading } = useSession();
+  const { profile, update } = useProfile();
   const fileInput = useRef<HTMLInputElement>(null);
 
-  const [profile, setProfile] = useState<ProfileRow | null>(null);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
@@ -36,28 +30,17 @@ export function AccountView({ products }: { products: Product[] }) {
   }, [sessionLoading, user, router]);
 
   useEffect(() => {
-    if (!user) return;
-    let active = true;
-    supabase
-      .from("users")
-      .select("full_name, phone, address, avatar_url")
-      .eq("id", user.id)
-      .single()
-      .then(({ data }) => {
-        if (!active || !data) return;
-        setProfile(data);
-        setName(data.full_name ?? "");
-        setPhone(data.phone ?? "");
-        setAddress(data.address ?? "");
-      });
-    return () => {
-      active = false;
-    };
-  }, [user]);
+    if (!profile) return;
+    Promise.resolve().then(() => {
+      setName(profile.full_name ?? "");
+      setPhone(profile.phone ?? "");
+      setAddress(profile.address ?? "");
+    });
+  }, [profile]);
 
   if (sessionLoading || !user) return null;
 
-  const avatarUrl = avatarPreview ?? profile?.avatar_url ?? (user.user_metadata?.avatar_url as string | undefined);
+  const avatarUrl = avatarPreview ?? profile?.avatar_url ?? undefined;
   const initial = (user.email?.[0] ?? "?").toUpperCase();
 
   const onAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,18 +69,14 @@ export function AccountView({ products }: { products: Product[] }) {
         avatarUrlToSave = supabase.storage.from("avatars").getPublicUrl(path).data.publicUrl;
       }
 
-      const { error: authError } = await supabase.auth.updateUser({
-        data: { full_name: name, avatar_url: avatarUrlToSave },
+      const { error: updateError } = await update({
+        full_name: name,
+        phone,
+        address,
+        avatar_url: avatarUrlToSave,
       });
-      if (authError) throw authError;
+      if (updateError) throw updateError;
 
-      const { error: dbError } = await supabase
-        .from("users")
-        .update({ full_name: name, phone, address, avatar_url: avatarUrlToSave })
-        .eq("id", user.id);
-      if (dbError) throw dbError;
-
-      setProfile({ full_name: name, phone, address, avatar_url: avatarUrlToSave });
       setAvatarFile(null);
       setSaved(true);
     } catch {
@@ -107,7 +86,7 @@ export function AccountView({ products }: { products: Product[] }) {
     }
   };
 
-  const displayName = (user.user_metadata?.full_name as string | undefined) || user.email;
+  const displayName = profile?.full_name || user.email;
 
   return (
     <section className="mx-auto max-w-[110rem] px-6 pb-28 pt-32 md:px-10 md:pb-40">

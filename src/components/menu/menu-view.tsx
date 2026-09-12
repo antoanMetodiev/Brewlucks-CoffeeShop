@@ -224,7 +224,7 @@ export function MenuView({ catalog }: { catalog: Catalog }) {
               )}
             </label>
 
-            <div className="flex items-center gap-3 md:gap-4">
+            <div className="flex flex-wrap items-center gap-3 md:flex-nowrap md:gap-4">
               <div role="group" aria-label={t.menu.categories} className="flex rounded-full border border-border bg-surface p-1">
                 {kindOptions.map((option) => (
                   <button

@@ -6,7 +6,7 @@ import { useCart } from "@/lib/cart/cart-provider";
 import type { Product } from "@/lib/catalog/types";
 
 type Props = {
-  product: Pick<Product, "kind" | "id" | "name" | "price">;
+  product: Pick<Product, "kind" | "id" | "name" | "price" | "image" | "origin" | "glass">;
   compact?: boolean;
   className?: string;
 };
@@ -19,7 +19,15 @@ export function AddToCartButton({ product, compact = false, className = "" }: Pr
   const onClick = (event: React.MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
-    add({ productId: `${product.kind}-${product.id}`, name: product.name, price: product.price });
+    add({
+      productId: `${product.kind}-${product.id}`,
+      kind: product.kind,
+      id: product.id,
+      name: product.name,
+      image: product.image,
+      price: product.price,
+      meta: [product.origin, product.glass].filter(Boolean).join(" · ") || undefined,
+    });
     setAdded(true);
     window.setTimeout(() => setAdded(false), 1500);
   };

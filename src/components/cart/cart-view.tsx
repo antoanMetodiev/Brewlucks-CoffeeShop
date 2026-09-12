@@ -1,8 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useLanguage } from "@/i18n/language-provider";
-import { formatDualPrice } from "@/lib/catalog/format";
+import { formatDualPrice, imageVariant, productHref } from "@/lib/catalog/format";
 import { useCart } from "@/lib/cart/cart-provider";
 import { whatsappMessageUrl } from "@/lib/site";
 
@@ -38,13 +39,34 @@ export function CartView() {
         <>
           <ul className="mt-12 divide-y divide-border border-y border-border">
             {items.map((item) => (
-              <li key={item.productId} className="flex items-center justify-between gap-4 py-5">
-                <div className="min-w-0">
-                  <p className="truncate font-display text-lg">{item.name}</p>
-                  <p className="mt-1 text-xs tabular-nums text-muted">{formatDualPrice(item.price, lang)}</p>
-                </div>
+              <li key={item.productId} className="flex flex-wrap items-center gap-4 py-5">
+                <Link
+                  href={productHref(item.kind, item.id)}
+                  className="group flex min-w-0 flex-1 items-center gap-4"
+                >
+                  <div className="photo-frame relative h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-surface">
+                    <Image
+                      src={imageVariant(item.image, "small")}
+                      alt={item.name}
+                      fill
+                      sizes="64px"
+                      className="object-cover brightness-90"
+                    />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="truncate font-display text-lg transition-colors duration-300 group-hover:text-accent">
+                      {item.name}
+                    </p>
+                    {item.meta && (
+                      <p className="truncate text-[0.6875rem] uppercase tracking-[0.14em] text-muted/70">
+                        {item.meta}
+                      </p>
+                    )}
+                    <p className="mt-1 text-xs tabular-nums text-muted">{formatDualPrice(item.price, lang)}</p>
+                  </div>
+                </Link>
 
-                <div className="flex shrink-0 items-center gap-4">
+                <div className="ml-auto flex shrink-0 items-center gap-4">
                   <div className="flex items-center rounded-full border border-border">
                     <button
                       type="button"
@@ -95,11 +117,13 @@ export function CartView() {
             </p>
           </div>
 
+          {/* Deliberately doesn't clear the cart — sending the WhatsApp message isn't proof the
+              order actually went through, so the products stay until the customer removes them
+              (or clears manually) themselves. */}
           <a
             href={checkoutUrl}
             target="_blank"
             rel="noreferrer"
-            onClick={() => window.setTimeout(clear, 300)}
             className="mt-8 block w-full rounded-full bg-accent px-8 py-4 text-center text-[0.6875rem] uppercase tracking-[0.18em] text-bg transition-all duration-400 ease-soft hover:brightness-110"
           >
             {t.cart.checkout}

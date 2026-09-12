@@ -15,7 +15,8 @@
     "db:sync": "tsx scripts/fetch-catalog.ts",
     "db:seed": "tsx scripts/seed-supabase.ts",
     "db:setup-auth": "tsx scripts/setup-auth-schema.ts",
-    "db:setup-profile": "tsx scripts/setup-profile-storage.ts"
+    "db:setup-profile": "tsx scripts/setup-profile-storage.ts",
+    "db:migrate-cart-favorites": "tsx scripts/migrate-user-cart-favorites.ts"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
