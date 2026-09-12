@@ -1,6 +1,6 @@
 import { cache } from "react";
-import { sql } from "@/lib/db";
 import type { Localized } from "@/i18n/dictionaries";
+import catalogSnapshot from "./generated/catalog.json";
 import type { Catalog, Ingredient, Product, ProductDetail, ProductKind, Section } from "./types";
 
 const DRINK_OF_THE_DAY_EXTERNAL_ID = "12770";
@@ -31,6 +31,9 @@ type ProductRow = {
   steps: string[];
 };
 
+const sectionRows = catalogSnapshot.sections as SectionRow[];
+const productRows = catalogSnapshot.products as ProductRow[];
+
 function localized(bg: string, en: string): Localized {
   return { bg, en };
 }
@@ -52,11 +55,6 @@ function toProduct(row: ProductRow): Product {
 }
 
 export const getCatalog = cache(async (): Promise<Catalog> => {
-  const [sectionRows, productRows] = await Promise.all([
-    sql<SectionRow[]>`select * from sections order by position`,
-    sql<ProductRow[]>`select * from products order by section_id, name`,
-  ]);
-
   const productsBySection = new Map<string, Product[]>();
   for (const row of productRows) {
     const product = toProduct(row);
@@ -82,9 +80,7 @@ export async function getFeatured(count = 8): Promise<Product[]> {
 }
 
 export async function getProduct(kind: ProductKind, id: string): Promise<ProductDetail | null> {
-  const [row] = await sql<ProductRow[]>`
-    select * from products where kind = ${kind} and external_id = ${id} limit 1
-  `;
+  const row = productRows.find((candidate) => candidate.kind === kind && candidate.external_id === id);
   if (!row) return null;
 
   return {

@@ -40,3 +40,4 @@ cloudflare-env.d.ts
 *.tsbuildinfo
 next-env.d.ts
 brewlucks-credentials.txt
+.env.example

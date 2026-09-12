@@ -6,6 +6,7 @@ import { useLanguage } from "@/i18n/language-provider";
 import type { Localized } from "@/i18n/dictionaries";
 import { currency, formatPrice, imageVariant, productHref } from "@/lib/catalog/format";
 import type { Product } from "@/lib/catalog/types";
+import { FavoriteButton } from "./favorite-button";
 
 type Props = {
   product: Product;
@@ -50,11 +51,14 @@ export function ProductCard({
           ) : (
             <span />
           )}
-          {sectionTitle && (
-            <span className="rounded-full bg-bg/70 px-3 py-1.5 text-[0.625rem] uppercase tracking-[0.2em] text-muted backdrop-blur">
-              {sectionTitle[lang]}
-            </span>
-          )}
+          <div className="flex items-center gap-2">
+            {sectionTitle && (
+              <span className="rounded-full bg-bg/70 px-3 py-1.5 text-[0.625rem] uppercase tracking-[0.2em] text-muted backdrop-blur">
+                {sectionTitle[lang]}
+              </span>
+            )}
+            <FavoriteButton productId={`${product.kind}-${product.id}`} />
+          </div>
         </div>
 
         <div className="absolute inset-x-0 bottom-0 translate-y-3 bg-gradient-to-t from-bg via-bg/85 to-transparent p-4 pt-14 opacity-0 transition-all duration-500 ease-editorial group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">

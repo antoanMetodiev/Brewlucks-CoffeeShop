@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { DM_Sans, Fraunces } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/i18n/language-provider";
+import { FavoritesProvider } from "@/lib/supabase/favorites-provider";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { getCatalog } from "@/lib/catalog/catalog";
@@ -21,9 +22,12 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   title: {
     default: "Brewlucks",
-    template: "%s — Brewlucks",
+    template: "%s - Brewlucks",
   },
   description: "Кафе, храна и бавни сутрини в сърцето на София. — Coffee, food and slow mornings in the heart of the city.",
+  icons: {
+    icon: "/images/brewlucks-logo.jpg",
+  },
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
@@ -34,9 +38,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="bg" suppressHydrationWarning>
       <body className={`${fraunces.variable} ${dmSans.variable} antialiased`}>
         <LanguageProvider>
-          <Header />
-          <main className="min-h-dvh">{children}</main>
-          <Footer sections={footerSections} />
+          <FavoritesProvider>
+            <Header />
+            <main className="min-h-dvh">{children}</main>
+            <Footer sections={footerSections} />
+          </FavoritesProvider>
         </LanguageProvider>
       </body>
     </html>

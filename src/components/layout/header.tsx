@@ -5,15 +5,19 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/i18n/language-provider";
 import { getNavLinks, isActivePath } from "@/lib/navigation";
+import { useSession } from "@/lib/supabase/use-session";
 import { LanguageToggle } from "./language-toggle";
 import { Wordmark } from "./wordmark";
 
 export function Header() {
   const { t } = useLanguage();
   const pathname = usePathname();
+  const { user } = useSession();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const links = getNavLinks(t);
+  const accountHref = user ? "/account" : "/login";
+  const accountLabel = user ? t.auth.myAccount : t.auth.signIn;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -73,6 +77,20 @@ export function Header() {
         <div className="flex items-center gap-6">
           <LanguageToggle />
           <Link
+            href={accountHref}
+            aria-label={accountLabel}
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-border text-[0.6875rem] uppercase text-fg transition-colors duration-300 hover:border-accent hover:text-accent"
+          >
+            {user ? (
+              (user.email?.[0] ?? "?").toUpperCase()
+            ) : (
+              <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <circle cx="12" cy="8" r="3.5" />
+                <path d="M4.5 19.5a7.5 7.5 0 0 1 15 0" strokeLinecap="round" />
+              </svg>
+            )}
+          </Link>
+          <Link
             href="/contact"
             className="hidden rounded-full bg-accent px-5 py-2.5 text-[0.6875rem] uppercase tracking-[0.18em] text-bg transition-all duration-400 ease-soft hover:brightness-110 md:inline-block"
           >
@@ -118,6 +136,16 @@ export function Header() {
               {link.label}
             </Link>
           ))}
+          <Link
+            href={accountHref}
+            onClick={() => setMenuOpen(false)}
+            style={{ transitionDelay: menuOpen ? `${120 + links.length * 70}ms` : "0ms" }}
+            className={`font-display text-4xl transition-all duration-500 ease-editorial ${
+              menuOpen ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+            } ${isActivePath(pathname, accountHref) ? "text-accent" : "text-fg"}`}
+          >
+            {accountLabel}
+          </Link>
         </nav>
       </div>
     </header>
