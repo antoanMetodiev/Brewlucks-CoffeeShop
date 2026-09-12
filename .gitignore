@@ -39,3 +39,4 @@ cloudflare-env.d.ts
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+brewlucks-credentials.txt
