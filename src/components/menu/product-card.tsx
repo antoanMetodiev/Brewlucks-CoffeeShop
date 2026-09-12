@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useLanguage } from "@/i18n/language-provider";
 import type { Localized } from "@/i18n/dictionaries";
-import { currency, formatPrice, imageVariant, productHref } from "@/lib/catalog/format";
+import { formatDualPrice, imageVariant, productHref } from "@/lib/catalog/format";
 import type { Product } from "@/lib/catalog/types";
 import { AddToCartButton } from "./add-to-cart-button";
 import { FavoriteButton } from "./favorite-button";
@@ -94,12 +94,12 @@ export function ProductCard({
         </div>
       </div>
 
-      <div className="mt-4 flex items-baseline justify-between gap-4">
+      <div className="mt-4 flex items-start justify-between gap-4">
         <h3 className="font-display text-lg leading-snug transition-colors duration-300 group-hover:text-accent">
           {product.name}
         </h3>
-        <span className="shrink-0 text-sm tabular-nums text-muted transition-colors duration-300 group-hover:text-fg">
-          {formatPrice(product.price)} {currency[lang]}
+        <span className="shrink-0 text-right text-xs leading-snug tabular-nums text-muted transition-colors duration-300 group-hover:text-fg">
+          {formatDualPrice(product.price, lang)}
         </span>
       </div>
       <p className="mt-1.5 text-[0.6875rem] uppercase tracking-[0.18em] text-muted/80">

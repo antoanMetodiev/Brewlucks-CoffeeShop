@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useLanguage } from "@/i18n/language-provider";
-import { currency, formatPrice } from "@/lib/catalog/format";
+import { formatDualPrice } from "@/lib/catalog/format";
 import { useCart } from "@/lib/cart/cart-provider";
 import { whatsappMessageUrl } from "@/lib/site";
 
@@ -13,9 +13,9 @@ export function CartView() {
   const checkoutUrl = whatsappMessageUrl(
     [
       t.cart.orderIntro,
-      ...items.map((item) => `${item.qty}x ${item.name} — ${formatPrice(item.qty * item.price)} ${currency[lang]}`),
+      ...items.map((item) => `${item.qty}x ${item.name} — ${formatDualPrice(item.qty * item.price, lang)}`),
       "",
-      `${t.cart.total}: ${formatPrice(total)} ${currency[lang]}`,
+      `${t.cart.total}: ${formatDualPrice(total, lang)}`,
     ].join("\n"),
   );
 
@@ -41,9 +41,7 @@ export function CartView() {
               <li key={item.productId} className="flex items-center justify-between gap-4 py-5">
                 <div className="min-w-0">
                   <p className="truncate font-display text-lg">{item.name}</p>
-                  <p className="mt-1 text-sm tabular-nums text-muted">
-                    {formatPrice(item.price)} {currency[lang]}
-                  </p>
+                  <p className="mt-1 text-xs tabular-nums text-muted">{formatDualPrice(item.price, lang)}</p>
                 </div>
 
                 <div className="flex shrink-0 items-center gap-4">
@@ -67,8 +65,8 @@ export function CartView() {
                     </button>
                   </div>
 
-                  <span className="w-20 shrink-0 text-right text-sm tabular-nums text-muted">
-                    {formatPrice(item.qty * item.price)} {currency[lang]}
+                  <span className="w-28 shrink-0 text-right text-xs tabular-nums text-muted">
+                    {formatDualPrice(item.qty * item.price, lang)}
                   </span>
 
                   <button
@@ -93,7 +91,7 @@ export function CartView() {
               {t.cart.remove} {t.cart.title.toLowerCase()}
             </button>
             <p className="font-display text-title tabular-nums">
-              {t.cart.total}: {formatPrice(total)} {currency[lang]}
+              {t.cart.total}: {formatDualPrice(total, lang)}
             </p>
           </div>
 

@@ -89,6 +89,17 @@
     opacity: 0;
     transform: translateY(2rem);
   }
+
+  [data-signature-step] {
+    position: absolute;
+    inset: 0;
+    margin-bottom: 0;
+    opacity: 0;
+  }
+
+  [data-signature-step]:first-child {
+    opacity: 1;
+  }
 }
 
 @utility eyebrow {

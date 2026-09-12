@@ -4,19 +4,19 @@ import Link from "next/link";
 import { useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { useLanguage } from "@/i18n/language-provider";
-import type { Product, ProductDetail } from "@/lib/catalog/types";
+import type { Product } from "@/lib/catalog/types";
 import { Atmosphere } from "./atmosphere";
-import { DrinkOfTheDay } from "./drink-of-the-day";
 import { FeaturedStrip } from "./featured-strip";
 import { FindUs } from "./find-us";
 import { Hero } from "./hero";
+import { SignatureScroll } from "./signature-scroll";
 
 type Props = {
   featured: Product[];
-  drink: ProductDetail | null;
+  signatureDrinks: Product[];
 };
 
-export function HomeView({ featured, drink }: Props) {
+export function HomeView({ featured, signatureDrinks }: Props) {
   const root = useRef<HTMLDivElement>(null);
   const { t, lang } = useLanguage();
 
@@ -61,7 +61,7 @@ export function HomeView({ featured, drink }: Props) {
 
       <FeaturedStrip products={featured} />
 
-      {drink && <DrinkOfTheDay drink={drink} />}
+      {signatureDrinks.length > 0 && <SignatureScroll products={signatureDrinks} />}
 
       <Atmosphere />
 

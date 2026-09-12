@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useLanguage } from "@/i18n/language-provider";
 import { getNavLinks, isActivePath } from "@/lib/navigation";
 import { useCart } from "@/lib/cart/cart-provider";
+import { useFavorites } from "@/lib/supabase/favorites-provider";
 import { useSession } from "@/lib/supabase/use-session";
 import { LanguageToggle } from "./language-toggle";
 import { Wordmark } from "./wordmark";
@@ -15,6 +16,7 @@ export function Header() {
   const pathname = usePathname();
   const { user } = useSession();
   const { count } = useCart();
+  const { ids: favoriteIds } = useFavorites();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const links = getNavLinks(t);
@@ -80,9 +82,34 @@ export function Header() {
         <div className="flex items-center gap-6">
           <LanguageToggle />
           <Link
+            href="/favorites"
+            aria-label={t.auth.favorites}
+            className="relative hidden h-8 w-8 items-center justify-center rounded-full border border-border text-fg transition-colors duration-300 hover:border-accent hover:text-accent md:flex"
+          >
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              className="h-4 w-4"
+              fill={favoriteIds.size > 0 ? "currentColor" : "none"}
+              stroke="currentColor"
+              strokeWidth="1.75"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 20.5s-7.5-4.6-10-9.2C.6 8.1 2 4.8 5.2 4.1c2-.4 4 .5 5.3 2.3l1.5 2 1.5-2c1.3-1.8 3.3-2.7 5.3-2.3 3.2.7 4.6 4 3.2 7.2-2.5 4.6-10 9.2-10 9.2Z"
+              />
+            </svg>
+            {favoriteIds.size > 0 && (
+              <span className="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-accent text-[0.5625rem] text-bg tabular-nums">
+                {favoriteIds.size}
+              </span>
+            )}
+          </Link>
+          <Link
             href="/cart"
             aria-label={t.cart.title}
-            className="relative flex h-8 w-8 items-center justify-center rounded-full border border-border text-fg transition-colors duration-300 hover:border-accent hover:text-accent"
+            className="relative hidden h-8 w-8 items-center justify-center rounded-full border border-border text-fg transition-colors duration-300 hover:border-accent hover:text-accent md:flex"
           >
             <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.5">
               <path
@@ -102,7 +129,7 @@ export function Header() {
           <Link
             href={accountHref}
             aria-label={accountLabel}
-            className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-border text-[0.6875rem] uppercase text-fg transition-colors duration-300 hover:border-accent hover:text-accent"
+            className="hidden h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-border text-[0.6875rem] uppercase text-fg transition-colors duration-300 hover:border-accent hover:text-accent md:flex"
           >
             {avatarUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -173,9 +200,22 @@ export function Header() {
             {accountLabel}
           </Link>
           <Link
-            href="/cart"
+            href="/favorites"
             onClick={() => setMenuOpen(false)}
             style={{ transitionDelay: menuOpen ? `${120 + (links.length + 1) * 70}ms` : "0ms" }}
+            className={`font-display text-4xl transition-all duration-500 ease-editorial ${
+              menuOpen ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+            } ${isActivePath(pathname, "/favorites") ? "text-accent" : "text-fg"}`}
+          >
+            {t.auth.favorites}
+            {favoriteIds.size > 0 && (
+              <span className="ml-3 text-lg text-muted tabular-nums">({favoriteIds.size})</span>
+            )}
+          </Link>
+          <Link
+            href="/cart"
+            onClick={() => setMenuOpen(false)}
+            style={{ transitionDelay: menuOpen ? `${120 + (links.length + 2) * 70}ms` : "0ms" }}
             className={`font-display text-4xl transition-all duration-500 ease-editorial ${
               menuOpen ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
             } ${isActivePath(pathname, "/cart") ? "text-accent" : "text-fg"}`}

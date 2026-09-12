@@ -3,8 +3,6 @@ import type { Localized } from "@/i18n/dictionaries";
 import catalogSnapshot from "./generated/catalog.json";
 import type { Catalog, Ingredient, Product, ProductDetail, ProductKind, Section } from "./types";
 
-const DRINK_OF_THE_DAY_EXTERNAL_ID = "12770";
-
 type SectionRow = {
   id: string;
   kind: ProductKind;
@@ -90,11 +88,11 @@ export async function getProduct(kind: ProductKind, id: string): Promise<Product
   };
 }
 
-export async function getDrinkOfTheDay(): Promise<ProductDetail | null> {
+// The signature drinks across all drink sections (coffee, shakes, lemonades) — used by the
+// home page's pinned horizontal-scroll showcase.
+export async function getSignatureDrinks(): Promise<Product[]> {
   const catalog = await getCatalog();
-  const coffee = catalog.find((section) => section.id === "coffee");
-  const pick =
-    coffee?.products.find((product) => product.id === DRINK_OF_THE_DAY_EXTERNAL_ID) ??
-    coffee?.products[0];
-  return pick ? getProduct("drink", pick.id) : null;
+  return catalog
+    .filter((section) => section.kind === "drink")
+    .flatMap((section) => section.products.filter((product) => product.signature));
 }

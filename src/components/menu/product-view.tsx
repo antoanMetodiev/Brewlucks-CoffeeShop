@@ -6,7 +6,7 @@ import { useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { useLanguage } from "@/i18n/language-provider";
 import type { Localized } from "@/i18n/dictionaries";
-import { currency, formatPrice } from "@/lib/catalog/format";
+import { formatDualPrice } from "@/lib/catalog/format";
 import type { Product, ProductDetail } from "@/lib/catalog/types";
 import { whatsappMessageUrl } from "@/lib/site";
 import { AddToCartButton } from "./add-to-cart-button";
@@ -53,7 +53,7 @@ export function ProductView({ product, sectionTitle, related }: Props) {
   );
 
   const orderUrl = whatsappMessageUrl(
-    `${t.product.orderMessage} ${product.name} (${formatPrice(product.price)} ${currency[lang]})`,
+    `${t.product.orderMessage} ${product.name} (${formatDualPrice(product.price, lang)})`,
   );
 
   const facts = [
@@ -110,7 +110,7 @@ export function ProductView({ product, sectionTitle, related }: Props) {
             </h1>
 
             <p data-hero className="mt-6 font-display text-title text-accent tabular-nums">
-              {formatPrice(product.price)} {currency[lang]}
+              {formatDualPrice(product.price, lang)}
             </p>
 
             {facts.length > 0 && (
