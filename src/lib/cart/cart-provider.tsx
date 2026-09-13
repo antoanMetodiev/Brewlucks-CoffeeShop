@@ -94,8 +94,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const persist = useCallback(
     (next: CartItem[]) => {
       setItems(next);
-      if (user) supabase.from("users").update({ cart: next }).eq("id", user.id).then(() => {});
-      else writeLocalCart(next);
+      if (user) {
+        supabase
+          .from("users")
+          .update({ cart: next })
+          .eq("id", user.id)
+          .then(({ error }) => {
+            if (error) console.error("Failed to save cart:", error);
+          });
+      } else {
+        writeLocalCart(next);
+      }
     },
     [user],
   );

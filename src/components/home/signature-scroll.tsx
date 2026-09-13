@@ -40,8 +40,13 @@ export function SignatureScroll({ products }: { products: Product[] }) {
           if (index === 0) return;
           timeline
             .to({}, { duration: 0.6 })
-            .to(steps[index - 1], { opacity: 0, y: -28, duration: 0.45 })
-            .to(step, { opacity: 1, y: 0, duration: 0.45 }, "<")
+            .to(steps[index - 1], {
+              opacity: 0,
+              y: -28,
+              duration: 0.45,
+              pointerEvents: "none",
+            })
+            .to(step, { opacity: 1, y: 0, duration: 0.45, pointerEvents: "auto" }, "<")
             .to(images[index], { scale: 1, duration: 0.9 }, "<");
         });
 
